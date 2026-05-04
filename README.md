@@ -1,42 +1,51 @@
 # Parallel Mirror Steer-by-Wire
 
-Wireless bilateral haptic mirror prototype built with `ESP32 + SimpleFOC + ESP-NOW`.
+Experimental bilateral haptic mirror system built with `ESP32`, `SimpleFOC`, and `ESP-NOW`.
 
 ![ESP32 FOC board overview](docs/board-overview.png)
 
-## Overview
+## Abstract
 
-This project connects two BLDC motor units wirelessly. Each side uses an `ESP32`-based FOC controller board to read the local shaft angle, transmit it to the other side over `ESP-NOW`, and generate a spring-like resistive response from the received position.
+This repository documents a research prototype for a wireless bilateral motor interface. Two BLDC motor nodes exchange angular position data over `ESP-NOW` and generate a mutual spring-like resistance through local torque control. Rather than implementing rigid master-slave tracking, the system explores a softer form of steer-by-wire coupling in which motion on one side is physically felt on the other.
 
-The goal is to create a steer-by-wire / mirror platform in which the two sides react to each other's movement without a mechanical linkage, while still producing a mutual physical feedback sensation. The project was developed in a design research and rapid prototyping context, with interest in haptic interaction and rehabilitation-oriented applications.
+The project sits at the intersection of rapid prototyping, interaction design, and rehabilitation-oriented haptic research. Its main contribution is a working proof of concept for a lightweight, mechanically unlinked, mutually perceivable motor interaction using low-cost embedded hardware.
 
-## Current Status
+## Research Context
 
-- The high-current `ESP32 FOC` board pin mapping has been validated.
-- The motor was successfully tested in open-loop mode.
-- `ESP-NOW` communication between the two boards works.
-- The current `v2` sketch already produces bilateral mirror behavior.
-- The code is a research prototype, not a finished product.
+The prototype was developed as part of a broader investigation into bilateral physical feedback systems. A key motivation was to build an experimental platform that can be iterated quickly and used to study how resistance, compliance, and reciprocity can be designed into small-scale motorized interfaces.
 
-## How It Works
+Instead of treating the system as a finished device, this repository presents it as a research instrument: a functional platform for testing haptic behavior, control strategies, and possible future applications in assistive or rehabilitation contexts.
 
-1. Each controller runs its own `FOC` loop locally.
-2. The sketch periodically sends the local shaft angle to the other board.
-3. The remote angle is compared to the local angle to compute an offset.
-4. A deadbanded, nonlinearly softened spring response is applied to that offset.
-5. If the wireless link times out, motor torque is set to zero.
+## System Overview
 
-The result is not strict position tracking, but a mutual physical coupling that feels like shared resistance.
+Each node in the system:
 
-## Hardware
+- runs a local `FOC` control loop on an `ESP32`
+- reads shaft position from an `AS5048` magnetic angle sensor
+- sends the measured angle to the other node over `ESP-NOW`
+- computes the difference between local and remote angle
+- converts that difference into a softened spring response
+- falls back to zero torque if communication is lost
+
+This produces a bilateral coupling effect that feels like shared resistance rather than exact positional locking.
+
+## Current Prototype Status
+
+- validated `ESP32 FOC` board pin mapping
+- stable open-loop motor test completed
+- working `ESP-NOW` communication between two boards
+- bilateral mirror behavior running in the current `v2` sketch
+- suitable as a research prototype, not yet as a deployable device
+
+## Hardware Platform
 
 ### Main Components
 
 - `2x` ESP32-based 20A FOC driver board
 - `2x` BLDC motor
-- `2x` magnetic angle sensor with `AS5048` SPI interface
+- `2x` `AS5048` magnetic angle sensor
 - external power supply
-- wires, connectors, and programming interface
+- wiring, connectors, and programming interface
 
 ### Validated Board Information
 
@@ -45,7 +54,7 @@ The result is not strict position tracking, but a mutual physical coupling that 
 | MCU | `ESP32-WROOM-32E` | onboard module |
 | Gate driver | `IR2104` | 3 half-bridge drivers |
 | MOSFET stage | `30V / 30A` | board-level power stage |
-| Current sense | `INA240A2` | supported by the board, but not actively used in the current sketch |
+| Current sense | `INA240A2` | available on the board, not actively used in the current sketch |
 | Motor output | `A / B / C` | 3-phase BLDC connection |
 
 ### Pinout Used by the Current Sketch
@@ -63,22 +72,20 @@ The result is not strict position tracking, but a mutual physical coupling that 
 
 ### Power Note
 
-The open-loop hardware validation was performed in a `24V` setup, but the current sketch uses `SUPPLY_VOLTAGE = 12.0f`. For first power-up, it is safest to start with low voltage and torque limits.
+The initial open-loop hardware validation was performed in a `24V` setup, while the current sketch uses `SUPPLY_VOLTAGE = 12.0f`. For first tests, low voltage and torque limits are strongly recommended.
 
-## Software Structure
+## Control Strategy
 
-Current main sketch:
+The current implementation uses a simple but effective haptic coupling model:
 
-- `2026_02_13_parallel_mirror_espnow_v2/2026_02_13_parallel_mirror_espnow_v2.ino`
+1. local shaft angle is sampled continuously
+2. angle data is transmitted to the peer node at about `500 Hz`
+3. the angular difference is measured locally
+4. a deadband removes small offsets around zero
+5. the remaining error is shaped through a nonlinear spring curve
+6. the resulting value is applied in torque-voltage mode
 
-### Libraries
-
-- `SimpleFOC`
-- `esp_now`
-- `WiFi`
-- `esp_wifi`
-
-### Important Runtime Parameters
+Key runtime parameters in the current sketch:
 
 | Parameter | Value | Meaning |
 | --- | --- | --- |
@@ -87,27 +94,40 @@ Current main sketch:
 | `TIMEOUT_MS` | `250` | link timeout threshold |
 | `VOLTAGE_LIMIT` | `7.0f` | maximum control voltage |
 | `SPRING_K` | `2.0f` | spring strength |
-| `DEAD_BAND_RAD` | `0.08f` | deadband where no resistance is applied |
-| `SOFTEN_EXP` | `1.4f` | nonlinear softening curve |
+| `DEAD_BAND_RAD` | `0.08f` | no-resistance zone around zero |
+| `SOFTEN_EXP` | `1.4f` | nonlinear response shaping |
 | `MIRROR_SIGN` | `+1` | direction inversion if needed |
+
+## Software
+
+Main sketch:
+
+- `2026_02_13_parallel_mirror_espnow_v2/2026_02_13_parallel_mirror_espnow_v2.ino`
+
+Main libraries:
+
+- `SimpleFOC`
+- `esp_now`
+- `WiFi`
+- `esp_wifi`
 
 ## Setup
 
-### 1. Required Environment
+### Requirements
 
 - `Arduino IDE` or `PlatformIO`
 - installed `ESP32` board support
 - installed `SimpleFOC` library
 
-### 2. Hardware Wiring
+### Wiring
 
-- Connect the BLDC motor to the board `A / B / C` outputs.
-- Connect the `AS5048` sensor to the `SPI` pins defined in the sketch.
-- Verify power and ground connections carefully.
+- connect the BLDC motor to the `A / B / C` outputs
+- connect the `AS5048` sensor to the `SPI` pins defined in the sketch
+- verify power and ground wiring carefully before startup
 
-### 3. MAC Address Configuration
+### MAC Address Configuration
 
-The sketch contains two board MAC addresses near the top. One board should use one `peerAddress`, and the other board should use the opposite one.
+Each board must target the other board's MAC address. The current sketch contains both addresses near the top:
 
 ```cpp
 // Running on Board A: peer = Board B
@@ -116,49 +136,53 @@ uint8_t peerAddress[] = { 0x88, 0x57, 0x21, 0xBC, 0x7C, 0x00 };
 // uint8_t peerAddress[] = { 0x88, 0x57, 0x21, 0xBB, 0xF3, 0x20 };
 ```
 
-### 4. First Power-Up
+### First Power-Up Checklist
 
-- Start with a low `VOLTAGE_LIMIT`.
-- If the direction is reversed, change `MIRROR_SIGN` to `-1`.
-- Confirm that sensor initialization and `FOC` startup are stable.
-- If the wireless link fails, the sketch falls back to zero motor torque.
+- start with a low `VOLTAGE_LIMIT`
+- confirm sensor initialization is stable
+- if the direction is reversed, set `MIRROR_SIGN = -1`
+- verify that link timeout correctly drops torque to zero
 
-## Tunable Parameters
+## Parameter Tuning
 
-If the system feels too stiff, noisy, or unstable, these are the most useful parameters to adjust:
+The most useful parameters for shaping the feel of the interaction are:
 
-- `VOLTAGE_LIMIT`: overall force / torque feel
-- `SPRING_K`: strength of mutual resistance
-- `DEAD_BAND_RAD`: amount of free play around center
-- `SOFTEN_EXP`: softness of the near-zero response
-- `SEND_PERIOD_US`: communication update speed
-- `TIMEOUT_MS`: how quickly the system disengages after link loss
+- `VOLTAGE_LIMIT` for overall force level
+- `SPRING_K` for coupling strength
+- `DEAD_BAND_RAD` for center free-play
+- `SOFTEN_EXP` for softening the near-zero response
+- `SEND_PERIOD_US` for communication update frequency
+- `TIMEOUT_MS` for disengagement speed after link loss
+
+## Prototype Limitations
+
+- the current implementation is still a research prototype
+- current sensing is documented at the board level but not yet central to the active control strategy
+- there is no full fault management, emergency stop layer, or production safety envelope
+- mechanical integration and long-duration reliability testing are still future work
 
 ## Safety Notes
 
-- This is a high-current motor controller board, so first tests should always be done with low limits and mechanically secured hardware.
-- Incorrect phase order, sensor wiring, or overly high `VOLTAGE_LIMIT` can cause vibration, heating, or sudden motion.
-- The current sketch is a research prototype and does not include full fault handling, emergency stop logic, or industrial-grade protection.
+- this is a high-current motor controller board, so initial tests should always be mechanically secured
+- incorrect phase order, sensor wiring, or overly high `VOLTAGE_LIMIT` can cause vibration, heating, or sudden motion
+- do not treat the current prototype as a clinically validated or deployment-ready system
 
-## Future Development
+## Repository Contents
 
-- integrate current sensing into torque control more directly
+- main prototype sketch: `2026_02_13_parallel_mirror_espnow_v2/`
+- development summary: [`docs/development-log.md`](docs/development-log.md)
+- board reference image: `docs/board-overview.png`
+- raw project notes: `KUTATÁSI_NAPLÓ.docx`
+- detailed project log: `2026_02_15_Steer By Wire Naplo 2025 2026.docx`
+
+## Future Directions
+
+- integrate current sensing more directly into torque control
 - add zero-point calibration and startup routines
 - improve filtering and smoothing
-- add optional diagnostics / debug mode
+- add optional diagnostics and debug tooling
 - continue mechanical integration and user testing
-
-## Source Material in This Folder
-
-- research and project notes: `KUTATÁSI_NAPLÓ.docx`
-- detailed steer-by-wire log: `2026_02_15_Steer By Wire Naplo 2025 2026.docx`
-- board reference images: `photos of the board/`
-- AliExpress board reference PDF
-
-A short Markdown summary of the raw notes is available here:
-
-- [`docs/development-log.md`](docs/development-log.md)
 
 ## Project Status
 
-This repository documents a working research prototype. The main result so far is that a bilateral, wireless, mutually perceivable motor mirror connection is feasible in an `ESP32 + SimpleFOC` environment.
+This repository documents a working proof of concept. At its current stage, the project demonstrates that a bilateral, wireless, mutually perceivable motor mirror connection can be implemented in an `ESP32 + SimpleFOC` environment using a lightweight embedded architecture.
