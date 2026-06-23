@@ -25,12 +25,4 @@ keywords:
   - Design Research
   - Physical Computing
 abstract: >
-  Parallel Mirror Steer-by-Wire is an open-source research platform developed
-  at the MOME Robotics Studio to investigate embodied human–robot interaction
-  and adaptive robotics through Research through Design methodologies. The
-  repository documents a wireless bilateral motor interface in which two
-  ESP32-based BLDC motor nodes exchange angular position data over ESP-NOW and
-  generate mutual spring-like resistance through local torque control. Built
-  with the SimpleFOC ecosystem, magnetic angle sensing, and low-cost embedded
-  hardware, the prototype supports reproducible experimentation with haptic
-  reciprocity, steer-by-wire coupling, and embodied physical interaction.
+  Parallel Mirror Steer-by-Wire is an open-source research platform developed at the MOME Robotics Studio to investigate embodied human–robot interaction and adaptive robotics through Research through Design methodologies. The repository documents a wireless bilateral motor interface in which twoESP32-based BLDC motor nodes exchange angular position data over ESP-NOW andgenerate mutual spring-like resistance through local torque control. Builtwith the SimpleFOC ecosystem, magnetic angle sensing, and low-cost embeddedhardware, the prototype supports reproducible experimentation with hapticreciprocity, steer-by-wire coupling, and embodied physical interaction.
