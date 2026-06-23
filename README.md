@@ -1,6 +1,10 @@
 # Parallel Mirror Steer-by-Wire
 
-Experimental bilateral haptic mirror system built with `ESP32`, `SimpleFOC`, and `ESP-NOW`.
+An open-source research platform for bilateral embodied human–robot interaction.
+
+Developed at the MOME Robotics Studio, this repository documents an experimental steer-by-wire system that enables two physically separated BLDC motors to exchange motion through real-time wireless communication and local torque control.
+
+The platform supports research into embodied interaction, haptic reciprocity, adaptive robotics, and Research through Design methodologies.
 
 ![ESP32 FOC board overview](docs/board-overview.png)
 
