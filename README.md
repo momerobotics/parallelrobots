@@ -1,4 +1,6 @@
-# Parallel Mirror Steer-by-Wire
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20809345.svg)](https://doi.org/10.5281/zenodo.20809345)
+
+# Parallel Mirror Steer-by-Wire# Parallel Mirror Steer-by-Wire
 
 An open-source research platform for bilateral embodied human–robot interaction.
 
