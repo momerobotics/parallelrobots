@@ -5,14 +5,10 @@
 #include <Preferences.h>
 #include <esp_now.h>
 #include <esp_wifi.h>
-#include <esp32-hal-rmt.h>
 
 static const int PWM_A=32, PWM_B=33, PWM_C=25, EN=12;
 static const int CURRENT_A_PIN=39, CURRENT_B_PIN=36;
 static const int SCK_PIN=18, MISO_PIN=19, MOSI_PIN=23, CS_PIN=5, VIN_PIN=13;
-static const int RGB_LED_PIN=2;
-// The installed RGB LED is disabled until its supply/data fault is identified.
-static const bool HAS_ONBOARD_RGB_LED=false;
 // iPower GM3506 specification: 24N/22P, therefore 11 rotor pole pairs.
 static const int POLE_PAIRS=11;
 // Calibrated against both prototype boards at their input terminals.
@@ -46,9 +42,6 @@ static const uint32_t HANDOFF_SESSION_MS=10UL*60UL*1000UL;
 static const uint8_t CHANNEL=1;
 static const uint32_t SEND_US=2000, TIMEOUT_MS=250, ARM_SYNC_MS=150;
 static const uint32_t AUTO_START_DELAY_MS=5000, AUTO_RETRY_MS=1000;
-static const uint32_t BATTERY_LED_MS=3000, LED_UPDATE_MS=50;
-static const uint32_t FOLDBACK_LED_HOLD_MS=500;
-static const uint8_t RGB_LED_BRIGHTNESS=48;
 static const uint32_t MAGIC=0x50524F42;
 static const uint16_t PROTOCOL_VERSION=7;
 static const uint8_t FOC_READY=1, ARMED=2, RUN_ENABLED=4;
@@ -87,7 +80,6 @@ BLDCMotor motor(POLE_PAIRS);
 BLDCDriver3PWM driver(PWM_A,PWM_B,PWM_C,EN);
 InlineCurrentSense currentSense(0.01f,50.0f,CURRENT_A_PIN,CURRENT_B_PIN);
 Preferences preferences;
-rmt_data_t statusLedData[24];
 
 uint8_t localMac[6]={}, peerMac[6]={};
 char node='?';
@@ -96,7 +88,6 @@ float bootVin=0, zeroPosition=0, torqueVoltage=0;
 bool radioReady=false, focReady=false, armed=false, autoStartEnabled=true;
 bool currentSenseReady=false;
 bool lowBattery=false;
-bool statusLedReady=false;
 bool currentFoldbackActive=false;
 bool profileStorageReady=false;
 bool manualStopLatched=false;
@@ -115,7 +106,6 @@ float activeCurrentScale=1.0f, activeSpeedScale=1.0f;
 float thermalCurrentSq=0, estimatedThermalCurrent=0, activeThermalScale=1.0f;
 uint32_t velocityUpdateUs=0, controlUpdateUs=0, armedAtMs=0, nextAutoArmMs=0;
 uint32_t currentMonitorUs=0;
-uint32_t batteryLedUntilMs=0, lastLedUpdateMs=0, lastFoldbackMs=0;
 uint32_t runIntentGraceUntilMs=0;
 
 bool sameMac(const uint8_t*a,const uint8_t*b){return memcmp(a,b,6)==0;}
@@ -148,61 +138,6 @@ void printMac(const uint8_t*m){
     if(m[i]<16)Serial.print('0');
     Serial.print(m[i],HEX);
   }
-}
-
-void setStatusLed(uint8_t red,uint8_t green,uint8_t blue){
-  if(!statusLedReady)return;
-  uint8_t colors[3]={
-    (uint8_t)((uint16_t)green*RGB_LED_BRIGHTNESS/255),
-    (uint8_t)((uint16_t)red*RGB_LED_BRIGHTNESS/255),
-    (uint8_t)((uint16_t)blue*RGB_LED_BRIGHTNESS/255)
-  };
-  int symbol=0;
-  for(int color=0;color<3;color++){
-    for(int bit=7;bit>=0;bit--){
-      bool one=colors[color]&(1U<<bit);
-      statusLedData[symbol].level0=1;
-      statusLedData[symbol].duration0=one?9:3;
-      statusLedData[symbol].level1=0;
-      statusLedData[symbol].duration1=one?11:17;
-      symbol++;
-    }
-  }
-  rmtWrite(RGB_LED_PIN,statusLedData,24,RMT_WAIT_FOR_EVER);
-  delayMicroseconds(150);
-}
-
-void showBatteryLed(){
-  float level=batteryLevel();
-  setStatusLed((uint8_t)((1.0f-level)*255.0f),(uint8_t)(level*255.0f),0);
-}
-
-void updateStatusLed(const Packet&p,uint32_t age){
-  uint32_t now=millis();
-  if(now-lastLedUpdateMs<LED_UPDATE_MS)return;
-  lastLedUpdateMs=now;
-
-  if(now<batteryLedUntilMs){showBatteryLed();return;}
-  if(lowBattery){
-    setStatusLed((now/250)%2?255:32,0,0);
-    return;
-  }
-  if(activeCurrentScale<0.95f)lastFoldbackMs=now;
-  if(now-lastFoldbackMs<FOLDBACK_LED_HOLD_MS){
-    if(activeCurrentScale<0.35f)setStatusLed(255,0,0);
-    else setStatusLed(255,55,0);
-    return;
-  }
-  if(!radioReady||age>TIMEOUT_MS){
-    setStatusLed(0,0,(now/300)%2?180:15);
-    return;
-  }
-  if(!armed||!(p.flags&ARMED)){
-    if(!autoStartEnabled)setStatusLed(180,80,0);
-    else setStatusLed(0,80,120);
-    return;
-  }
-  setStatusLed(0,180,0);
 }
 
 void onReceive(const esp_now_recv_info_t*info,const uint8_t*data,int len){
@@ -458,16 +393,10 @@ void setup(){
     uint8_t stored=preferences.getUChar("profile",PROFILE_NORMAL);
     activeProfile=stored<=PROFILE_STRONG?stored:PROFILE_NORMAL;
   }
-  if(HAS_ONBOARD_RGB_LED){
-    statusLedReady=rmtInit(RGB_LED_PIN,RMT_TX_MODE,RMT_MEM_NUM_BLOCKS_1,10000000);
-    if(statusLedReady){rmtSetEOT(RGB_LED_PIN,LOW);setStatusLed(0,0,0);}
-    else Serial.println("RGB LED RMT init failed");
-  }
   analogReadResolution(12);
   analogSetPinAttenuation(VIN_PIN,ADC_11db);
   bootVin=readVin();lowBattery=bootVin<MIN_VIN;
   if(lowBattery)autoStartEnabled=false;
-  showBatteryLed();batteryLedUntilMs=millis()+BATTERY_LED_MS;
   SPI.begin(SCK_PIN,MISO_PIN,MOSI_PIN,CS_PIN);
   sensor.init(&SPI);sensor.update();zeroPosition=sensor.getAngle();
   driver.voltage_power_supply=max(bootVin,9.0f);
@@ -577,10 +506,6 @@ void loop(){
         }else if(currentFoldbackActive&&activeCurrentScale>0.99f){
           currentFoldbackActive=false;
         }
-        if(activeCurrentScale<0.95f){
-          lastFoldbackMs=millis();
-        }
-
         float errorMagnitude=fabsf(error);
         if(errorMagnitude<=DEAD_BAND)positionIntegral=0;
         else if(errorMagnitude>=profile.integralEnableError&&
@@ -614,6 +539,5 @@ void loop(){
     if(peerReady)arm();
     nextAutoArmMs=ms+AUTO_RETRY_MS;
   }
-  updateStatusLed(p,age);
   if(ms-lastPrintMs>=500){status();lastPrintMs=ms;}
 }
