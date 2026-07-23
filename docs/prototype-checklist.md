@@ -19,6 +19,7 @@ still required for a repeatable, mechanically integrated prototype.
 - bidirectional one-node reset, link-timeout shutdown, and automatic recovery
 - protocol-7 supervised handoff mode with fixed profile, 5-second startup,
   10-minute session limit, locked tuning commands, and latched runtime link faults
+- versioned build instructions and a staged reproduction procedure
 
 ## P0 - Before Unattended or Extended Testing
 
@@ -47,12 +48,13 @@ still required for a repeatable, mechanically integrated prototype.
 - strain relief and keyed connectors for motor, encoder, battery, and programming cables
 - guarded electronics and battery enclosure with ventilation
 - accessible charge connector and battery state indication when motors are off
-- reproducible wiring diagram, bill of materials, assembly steps, and acceptance test
+- mechanical assembly drawings, dimensions, fasteners, and acceptance tolerances
 
 ## Battery Measurement Limitation
 
 The Mega board's VIN divider is connected to `GPIO13`, an ESP32 ADC2 channel.
 ADC2 is shared with Wi-Fi, so the current firmware measures battery voltage only
-before ESP-NOW starts. The LED percentage is therefore a startup estimate, not a
-live fuel gauge. A protected pack remains mandatory; continuous software cutoff
-requires moving the divider to ADC1 or adding an external voltage monitor.
+before ESP-NOW starts. The serially reported percentage is therefore a startup
+estimate, not a live fuel gauge. A protected pack remains mandatory; continuous
+software cutoff requires moving the divider to ADC1 or adding an external
+voltage monitor.

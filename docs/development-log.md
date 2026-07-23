@@ -73,9 +73,9 @@ Recorded current sensing data:
 - The system produced a mutual physical resistance sensation.
 - The first working version was published to GitHub.
 
-## What the Current Sketch Implements
+## What the February 2026 Sketch Implemented
 
-The current `v2` code:
+The historical `v2` code:
 
 - reads the local motor angle
 - sends it to the other board
@@ -87,7 +87,11 @@ This is not a rigid position-following system. It is a haptic coupling strategy 
 
 ## Important Note
 
-The research notes also describe current sensing and additional closed-loop possibilities at the platform level, but the current `2026_02_13_parallel_mirror_espnow_v2.ino` sketch primarily documents a sensor-based `SimpleFOC` and `ESP-NOW` mirror behavior.
+The research notes also describe current sensing and additional closed-loop
+possibilities at the platform level, but the February 2026 sketch primarily
+documents a sensor-based `SimpleFOC` and `ESP-NOW` mirror behavior. It is now
+preserved under `firmware/legacy/`; the current MKS Mega firmware is
+`firmware/MKS_Parallel_Mirror/MKS_Parallel_Mirror.ino`.
 
 ## July 14, 2026 - MKS ESP32 FOC Mega Port
 
@@ -153,6 +157,9 @@ top-left `VDD` lead, while the top-right `DI` lead is permanently at `3.3 V`.
 The PCB footprint swaps the LED supply and data nets on both tested boards.
 This cannot be corrected in firmware; the upper leads must be lifted and
 cross-wired, or an external status LED must be used.
+After the hardware fault was established, the standalone RGB diagnostic and
+the inactive LED driver code were removed from the current firmware. Serial
+telemetry remains the supported status interface.
 
 ### Input-voltage calibration
 
