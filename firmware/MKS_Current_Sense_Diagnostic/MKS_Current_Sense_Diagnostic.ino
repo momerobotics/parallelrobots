@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <esp_mac.h>
 
 static const int MOTOR_ENABLE_PIN = 12;
 static const int CURRENT_A_PIN = 39;
@@ -33,18 +34,26 @@ ChannelSample sampleChannel(int pin, int count) {
 }
 
 void printMac() {
-  uint64_t mac = ESP.getEfuseMac();
-  for (int i = 5; i >= 0; --i) {
-    if (i != 5) Serial.print(':');
-    uint8_t value = (mac >> (8 * i)) & 0xFF;
-    if (value < 16) Serial.print('0');
-    Serial.print(value, HEX);
+  uint8_t mac[6] = {};
+  if (esp_read_mac(mac, ESP_MAC_WIFI_STA) != ESP_OK) {
+    Serial.print("READ_FAILED");
+    return;
+  }
+  for (int i = 0; i < 6; ++i) {
+    if (i != 0) Serial.print(':');
+    if (mac[i] < 16) Serial.print('0');
+    Serial.print(mac[i], HEX);
   }
 }
 
 void setup() {
-  pinMode(MOTOR_ENABLE_PIN, OUTPUT);
   digitalWrite(MOTOR_ENABLE_PIN, LOW);
+  pinMode(MOTOR_ENABLE_PIN, OUTPUT);
+  const int pwmPins[] = {32, 33, 25};
+  for (int pin : pwmPins) {
+    digitalWrite(pin, LOW);
+    pinMode(pin, OUTPUT);
+  }
 
   Serial.begin(115200);
   delay(800);

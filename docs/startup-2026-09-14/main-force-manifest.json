@@ -1,0 +1,14 @@
+{
+  "source_sha256": "1d3b95c838b3406d3df4976dd7b847138a8346c96d0d76d6f2657878d733af0e",
+  "binary_sha256": "59139aa87ee320cf2018e1de488fef3cf231675df947dd11e3f6b808244ea39a",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 4,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.1,
+  "hard_current_a": 1.35,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 30,
+  "validation": "Host checks and ESP32 compilation passed; both uploads hash-verified at 115200 baud. Both nodes completed the 30-second trial and autonomously stopped. User force/temperature assessment pending."
+}

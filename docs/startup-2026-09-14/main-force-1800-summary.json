@@ -1,0 +1,22 @@
+{
+  "1410": {
+    "armed_samples": 20,
+    "peak_current_a": 0.147,
+    "max_abs_uq_v": 0.0,
+    "max_sampled_difference_rad": 0.002,
+    "hard_cuts": 0,
+    "speed_cuts": 0,
+    "final_armed": 0,
+    "timer_stop_observed": false
+  },
+  "1430": {
+    "armed_samples": 20,
+    "peak_current_a": 0.133,
+    "max_abs_uq_v": 0.0,
+    "max_sampled_difference_rad": 0.003,
+    "hard_cuts": 0,
+    "speed_cuts": 0,
+    "final_armed": 0,
+    "timer_stop_observed": false
+  }
+}

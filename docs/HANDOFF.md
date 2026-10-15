@@ -1,5 +1,11 @@
 # Parallel Robots — Supervised Operation Guide
 
+**Historical configuration:** This guide describes the original pair's autonomous
+handoff build. The current replacement-pair source starts disabled and requires
+explicit serial arming. Its force profile has a 120-second supervised timeout.
+Use the [current baseline procedure](startup-2026-09-14/end-of-day.md) for that
+build; the automatic startup and 10-minute session below do not apply to it.
+
 This is a research prototype, not a finished product. Operate it only under
 supervision.
 

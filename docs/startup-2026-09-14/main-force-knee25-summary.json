@@ -1,0 +1,40 @@
+{
+  "trial_seconds": 120,
+  "motor_surface_readings_c": [
+    28,
+    30
+  ],
+  "baseline_c": null,
+  "final_temperature_c": null,
+  "operator_assessment": "User reports favorable direction, requests 68% at 10 degrees, less thermal-estimator foldback and filtering of brief small oscillations. Final post-stop temperature not separately reported.",
+  "nodes": {
+    "A": {
+      "armed_samples": 240,
+      "arm_events": 1,
+      "peak_current_a": 1.878,
+      "max_abs_uq_v": 5.319,
+      "min_thermal_scale": 0.53,
+      "max_thermal_estimate_a": 0.844,
+      "min_current_scale": 0.87,
+      "hard_cuts": 0,
+      "speed_cuts": 65,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": true
+    },
+    "B": {
+      "armed_samples": 240,
+      "arm_events": 1,
+      "peak_current_a": 1.815,
+      "max_abs_uq_v": 5.328,
+      "min_thermal_scale": 0.56,
+      "max_thermal_estimate_a": 0.838,
+      "min_current_scale": 0.85,
+      "hard_cuts": 0,
+      "speed_cuts": 67,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": true
+    }
+  }
+}

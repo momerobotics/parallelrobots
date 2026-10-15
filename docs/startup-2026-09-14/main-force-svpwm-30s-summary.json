@@ -1,0 +1,37 @@
+{
+  "trial_seconds": 30,
+  "pwm": "centered SpaceVectorPWM",
+  "motor_surface_baseline_c": 31,
+  "motor_surface_final_c": 32,
+  "operator_feedback": "Approximately the same feel as SinePWM. No clear change noticed in warmth, oscillation or vibration; slight scratchy/growling sensation under larger load remains, direction of change uncertain.",
+  "nodes": {
+    "A": {
+      "armed_samples": 60,
+      "arm_events": 1,
+      "peak_current_a": 1.87,
+      "max_abs_uq_v": 5.5,
+      "min_thermal_scale": 1.0,
+      "max_thermal_estimate_a": 0.896,
+      "hard_cuts": 0,
+      "speed_cuts": 5,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": true,
+      "peer_stop_observed": false
+    },
+    "B": {
+      "armed_samples": 60,
+      "arm_events": 1,
+      "peak_current_a": 1.84,
+      "max_abs_uq_v": 5.5,
+      "min_thermal_scale": 1.0,
+      "max_thermal_estimate_a": 0.862,
+      "hard_cuts": 0,
+      "speed_cuts": 0,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": false,
+      "peer_stop_observed": true
+    }
+  }
+}

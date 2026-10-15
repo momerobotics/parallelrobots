@@ -498,3 +498,65 @@ an explicit development serial start). A forced one-node reset confirmed that
 the healthy peer entered `stopLatch=1` on link timeout and did not re-arm when
 communication returned. Initial protocol-7 startup was also verified with both
 nodes armed, matched, and idle at `11.69 V` and `11.68 V` respectively.
+
+
+## 2026-09-14 — Replacement hardware and manual commissioning documentation
+
+Two new MKS Mega boards and new GM3506/AS5048A assemblies passed independent
+encoder checks, idle-current checks and the reduced-voltage v2 six-vector motor
+test. The operator confirmed normal motion on both. See the
+[startup evidence](startup-2026-09-14/README.md) for measurements and logs.
+FOC calibration, pairing, main acceptance and sufficient on-body feedback remain open.
+
+Uploads must always use 115200 baud, including diagnostics and replacement boards.
+The owner chose to defer unified commissioning/persistent calibration and retain
+the current manual workflow. Added a [complete procedure](new-system-commissioning.md),
+[assembly record template](commissioning-record-template.md)
+and [deferred development scope](future-development.md). The documentation explicitly
+separates the original pair's constants from unmeasured replacement values and
+marks the standalone FOC calibration sketch as an unvalidated development candidate.
+No main-firmware configuration was changed as part of this documentation work.
+
+Documentation language was subsequently standardized to English at the owner's
+request. Existing guide links now point to the English documents; former
+translation paths contain English forwarding notices for previously shared links.
+
+### Later September commissioning results
+
+The pending statuses in the initial entry above were subsequently updated:
+both replacement assemblies passed repeated FOC calibration and independent
+position checks, followed by radio pairing and supervised bilateral trials.
+The main/link sketches now use the replacement MACs and adopted electrical zeros.
+Runtime voltage-limit restoration, buffered telemetry, peer-start handling and
+one-packet radio gating were added during those trials. The saved final force
+profile is knee10-no-filter, with explicit start and a 120-second timeout.
+See the [end-of-day record](startup-2026-09-14/end-of-day.md) for the final
+configuration, evidence and remaining acceptance work. Oscillation is unresolved.
+
+## 2026-10-15 — Repository review after workspace relinking
+
+The Git checkout remains in the `parallelrobots` subdirectory. Fetching GitHub
+confirmed local HEAD and `origin/main` at `39e08ff`, with no divergent commits;
+the September commissioning work was still uncommitted. No tracked-file rename
+was present. The project documentation and test scripts use repository-relative
+paths, so relinking the enclosing workspace required no source path changes.
+
+Before synchronizing the commissioning work:
+
+- All five host suites passed: phase startup, FOC startup, haptic profiles,
+  peer start/stop and radio sender gating.
+- All six active MKS sketches compiled with Arduino CLI 1.4.1, ESP32 core
+  3.3.12, Simple FOC 2.4.0 and FQBN
+  `esp32:esp32:esp32:UploadSpeed=115200`.
+- The main source and frozen source copy matched the recorded SHA-256
+  `26f5824170a1fc86ad7c7f7d2147a400e827b01a754592b72c130de0106e7f2f`.
+  All four archived flash files and their four flashed copies matched the
+  saved checksums.
+- Overview and firmware documentation were reconciled with the saved baseline:
+  replacement MACs, explicit start, 100 Hz radio attempts and current force
+  settings. The original autonomous handoff guide is marked historical.
+
+This review changed documentation only; the existing September firmware and
+archived binaries were preserved. No firmware was uploaded and no hardware
+trial was performed. The newer-core compile does not replace the archived
+hardware-tested binaries or establish hardware acceptance for a new build.

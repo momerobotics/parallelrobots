@@ -1,0 +1,48 @@
+{
+  "1410": {
+    "armed_samples": 60,
+    "peak_current_a": 1.346,
+    "max_abs_uq_v": 3.597,
+    "hard_cuts": 0,
+    "speed_cuts": 19,
+    "min_thermal_scale": 1.0,
+    "min_current_scale": 0.51,
+    "final_armed": 0,
+    "timer_stop_observed": true,
+    "sampled_angle_bins_not_static_torque_measurements": {
+      "10-20_degrees": {
+        "samples": 5,
+        "median_abs_uq_v": 1.447,
+        "median_abs_local_velocity_rad_s": 0.58
+      },
+      "20-30_degrees": {
+        "samples": 5,
+        "median_abs_uq_v": 2.427,
+        "median_abs_local_velocity_rad_s": 1.69
+      }
+    }
+  },
+  "1430": {
+    "armed_samples": 60,
+    "peak_current_a": 1.301,
+    "max_abs_uq_v": 3.721,
+    "hard_cuts": 0,
+    "speed_cuts": 17,
+    "min_thermal_scale": 1.0,
+    "min_current_scale": 0.43,
+    "final_armed": 0,
+    "timer_stop_observed": false,
+    "sampled_angle_bins_not_static_torque_measurements": {
+      "10-20_degrees": {
+        "samples": 6,
+        "median_abs_uq_v": 1.7734999999999999,
+        "median_abs_local_velocity_rad_s": 0.445
+      },
+      "20-30_degrees": {
+        "samples": 4,
+        "median_abs_uq_v": 3.2279999999999998,
+        "median_abs_local_velocity_rad_s": 0.49
+      }
+    }
+  }
+}

@@ -4,6 +4,10 @@ This guide describes the exact tested configuration of the Parallel Mirror
 Steer-by-Wire prototype. It separates reproduction of the validated two-node
 system from adaptation to replacement hardware.
 
+For a completely new pair, follow the current [manual commissioning guide](new-system-commissioning.md)
+and fill in an [assembly record](commissioning-record-template.md).
+The values below describe the original pair, not the September replacement pair.
+
 The system is a supervised research prototype. Complete the staged checks below
 before enabling motor drive.
 
@@ -131,9 +135,15 @@ arduino-cli compile --fqbn esp32:esp32:esp32 \
 Upload one sketch at a time:
 
 ```sh
-arduino-cli upload -p <serial-port> --fqbn esp32:esp32:esp32 \
+arduino-cli upload -p <serial-port> --fqbn esp32:esp32:esp32:UploadSpeed=115200 \
   firmware/MKS_Parallel_Mirror
 ```
+
+Always use **115200 baud for uploads**, including diagnostics and replacement
+boards. Higher speeds have repeatedly failed on this project; do not retry the
+default 921600 baud before using the proven rate. In Arduino IDE select
+Tools > Upload Speed > 115200. Serial-monitor baud is a separate setting.
+This standing user instruction was confirmed on 2026-09-14.
 
 Disconnect motor power while flashing. Use USB-A-to-USB-C with this board
 revision; USB-C-to-USB-C was not reliable on the tested boards.
@@ -149,81 +159,58 @@ values are not universal:
 | Electrical zero | `0.630083 rad` | `5.940915 rad` |
 | Sensor direction | `CCW` | `CCW` |
 
-The firmware identifies A or B from the local MAC address. A replacement ESP32,
-motor, encoder, changed phase order, or changed magnet alignment requires:
+The firmware identifies A or B from the local station MAC address. New physical
+motor/encoder assemblies require individually measured electrical zeros and
+directions even when their model numbers match. With only a compatible board
+replacement, an unchanged motor/encoder assembly and unchanged phase order can
+reuse its accepted motor calibration; the new board still needs identity,
+current-sense, VIN and functional checks.
 
-1. recording the replacement board's station MAC
-2. updating `MAC_A` or `MAC_B` in both active sketches
-3. building a controlled development firmware with `HANDOFF_MODE=false`
-4. running a fresh FOC calibration with the mechanism free to move
-5. recording the reported direction and `zeroE` value
-6. updating the stored constants only after repeatable calibration results
-7. reflashing both nodes with the same protocol version
-8. repeating all link, current, motion, timeout, and thermal checks
+The main sketch currently forces CCW in both stored setup and its blocking
+`c` calibration path. Setting `HANDOFF_MODE=false` alone is not a general
+new-motor calibration procedure. Follow the calibration gate and manual
+configuration instructions in the [new-system guide](new-system-commissioning.md).
 
-Calibration causes motor movement. Do not run it in an assembled user-facing
-mechanism or with hands inside the motion envelope.
+The September replacement pair has these recorded station identities:
+
+| Item | A | B |
+| --- | --- | --- |
+| Station MAC | `30:C9:22:5F:5E:2C` | `88:57:21:19:D5:70` |
+| Accepted electrical zero | `1.566572 rad` | `4.843634 rad` |
+| Accepted encoder direction | `CCW` | `CCW` |
+
+The main/link source now uses these replacement MACs and the main uses the
+accepted zeros above. The original pair's earlier table is retained for history.
+See the session record for the stronger-profile commissioning status.
 
 ## 7. Staged Bring-Up
 
-### Stage 1 — Visual and electrical inspection
+Use the [detailed manual procedure](new-system-commissioning.md) for commands,
+logs, limits, pass criteria and the configuration checklist:
 
-- confirm the board silkscreen says `Makerbase ESP32 FOC Mega`
-- inspect battery polarity and connector strain relief
-- verify that each node has its own protected `3S` pack
-- keep motor power disconnected while checking USB communication
-- keep the mechanism mechanically secured and unobstructed
+1. Inspect wiring, polarity, phase continuity and mechanical attachment; label
+   each board/motor/encoder and battery separately.
+2. Run `MKS_Startup_Diagnostic` to record station MACs and validate stationary,
+   bidirectional and cable-motion encoder readings without motor drive.
+3. Run `MKS_Current_Sense_Diagnostic` on USB and actual supply; record idle offsets.
+4. Use the idle phase diagnostic to compare VIN with a meter, then run the
+   v2 six-vector test on one secured motor at a time.
+5. Establish repeatable FOC direction/zero and independently verify both directions.
+   Standalone calibration v3 and independent FOC verification passed on both
+   September assemblies; repeat those checks for another new pair.
+6. Update both MAC arrays in main and link sketches and validate the no-drive
+   radio diagnostic on both nodes. This can precede step 5; main drive cannot.
+7. Integrate accepted calibrations and use a controlled main build with automatic
+   startup disabled on both nodes. Verify gentle-profile coupling and stop behavior.
+8. Only after these checks, restore the handoff configuration and perform its
+   startup, link-loss, session-timeout, thermal and actual-mounting acceptance tests.
 
-The onboard RGB LED is unusable on both tested boards because its `VDD` and `DI`
-nets are swapped at the footprint. An unlit LED is expected and is not a status
-signal.
+The September diagnostics used ESP32 core 3.3.11 with CLI 1.4.1 and Simple FOC
+2.4.0. This differs from the original core 3.3.10 handoff environment above;
+record and validate the environment used for the eventual new main build.
 
-### Stage 2 — Encoder and radio link
-
-Flash `MKS_Bilateral_Link_Test` to both nodes. This sketch keeps the motor
-drivers disabled.
-
-Pass criteria:
-
-- both nodes identify as A or B, not unknown hardware
-- `AS5048A: OK`
-- local angle changes continuously and in the expected direction
-- receive count increases on both nodes
-- packet age normally remains well below the `250 ms` timeout
-
-### Stage 3 — Current-sense offsets
-
-With the motor driver not switching, run
-`MKS_Current_Sense_Diagnostic`.
-
-The tested zero-current reference levels were approximately `1685 mV` on node A
-and `1676 mV` on node B. Treat these as historical reference values, not
-universal acceptance limits. Investigate unstable, saturated, or markedly
-different readings before enabling drive.
-
-### Stage 4 — Main controller
-
-Flash `MKS_Parallel_Mirror` to both nodes. Keep both mechanisms free during the
-startup interval.
-
-Expected serial state:
-
-- `radio=OK`
-- `storedFOC=OK`
-- `currentSense=OK`
-- `protocol=7`
-- the two nodes report matching profiles
-- automatic arm occurs only after peer synchronization and the 5-second delay
-
-### Stage 5 — Fault checks
-
-Before any user-facing test:
-
-- confirm manual stop disables both nodes
-- power down one node and confirm the peer disables after link timeout
-- confirm handoff mode remains latched off after a runtime link fault
-- power-cycle both nodes and confirm synchronized startup
-- confirm automatic shutdown after the 10-minute session limit
+Detailed results and pending checks are in the
+[September startup record](startup-2026-09-14/README.md).
 
 ## 8. Acceptance Boundary
 

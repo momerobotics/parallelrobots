@@ -1,0 +1,16 @@
+{
+  "source_sha256": "4a47e7478dc978d3bae9b560630391ff5444e22155804cb45ef33839a39a3bc5",
+  "binary_sha256": "d03dfa46957992871c8527793c9b7cd5ef0f7bb4c4f3b6e94ecddf5e847b6f7a",
+  "upload_baud": 115200,
+  "profile": "force",
+  "curve": "Continuous piecewise linear: deadband to 85% at 25 degrees, then 100% at 60 degrees",
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.75,
+  "hard_current_a": 2.0,
+  "thermal_soft_estimate_a": 0.75,
+  "thermal_hard_estimate_a": 0.95,
+  "force_attack_v_per_s": 80,
+  "trial_timeout_seconds": 120,
+  "automatic_start": false,
+  "validation": "Host checks, compilation and both 115200-baud uploads passed. Two-minute powered trial completed with one arm per node and both timer stops observed. Both motors disabled; operator curve assessment pending."
+}

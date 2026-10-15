@@ -1,0 +1,14 @@
+{
+  "source_sha256": "c4b0284a238aa61d6bff1496fe960fd78928d815954b8b919d0f877279eece87",
+  "binary_sha256": "cbb5d3f03a79a5f900718d1c3a7eb9470dcfca761e877a032325e809ee01f701",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 10,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.1,
+  "hard_current_a": 1.35,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 30,
+  "validation": "Host checks and ESP32 compilation passed; both uploads verified at 115200 baud. 30-second trial completed; A timer stop and B peer stop confirmed; user assessment pending."
+}

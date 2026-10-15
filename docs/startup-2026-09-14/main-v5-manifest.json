@@ -1,0 +1,36 @@
+{
+  "stage": "controlled-v5",
+  "validation": "Both uploads hash-verified at 115200 baud; supervised 25-second force trial completed; both nodes stopped; user assessment pending.",
+  "source_sha256": "d8b14d368b659734c988991f6aac07136ec3daf6c8d57eae081545d6612edce1",
+  "binary_sha256": "48ae2af5204059ae9970aafb8c2623096e23b93c05e2f1b7e61f709d48961b5d",
+  "upload_baud": 115200,
+  "esp32_core": "3.3.11",
+  "simplefoc": "2.4.0",
+  "handoff": false,
+  "automatic_start": false,
+  "boost": {
+    "voltage_limit": 3.5,
+    "spring_k": 8.0,
+    "deadband_rad": 0.008,
+    "exponent": 1.0,
+    "friction_v": 0.16,
+    "position_i": 0.08,
+    "integral_limit_v": 0.1,
+    "viscous_damping": 0.14,
+    "coupling_damping": 0.1,
+    "soft_current_a": 1.1,
+    "hard_current_a": 1.35,
+    "thermal_soft_a": 0.45,
+    "thermal_hard_a": 0.6
+  },
+  "A": {
+    "mac": "30:C9:22:5F:5E:2C",
+    "zero_electric_rad": 1.566572,
+    "direction": "CCW"
+  },
+  "B": {
+    "mac": "88:57:21:19:D5:70",
+    "zero_electric_rad": 4.843634,
+    "direction": "CCW"
+  }
+}

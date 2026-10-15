@@ -1,0 +1,50 @@
+{
+  "1410": {
+    "rows": 136,
+    "local_range": [
+      -1.372,
+      2.741
+    ],
+    "remote_range": [
+      -2.759,
+      1.039
+    ],
+    "lost_samples": 6,
+    "last": {
+      "node": "A",
+      "local": "-0.167",
+      "remote": "0.001",
+      "link": "OK",
+      "ageMs": "1",
+      "tx": "37268",
+      "rx": "37357",
+      "txFail": "6997",
+      "encErr": "0",
+      "bootVin": "12.70"
+    }
+  },
+  "1430": {
+    "rows": 101,
+    "local_range": [
+      -3.068,
+      0.643
+    ],
+    "remote_range": [
+      -1.027,
+      2.681
+    ],
+    "lost_samples": 0,
+    "last": {
+      "node": "B",
+      "local": "-1.962",
+      "remote": "-0.167",
+      "link": "OK",
+      "ageMs": "1",
+      "tx": "32484",
+      "rx": "32182",
+      "txFail": "4039",
+      "encErr": "0",
+      "bootVin": "12.51"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "1410": {
+    "armed_rows": 174,
+    "max_abs_uq_v": 1.799,
+    "peak_current_a": 0.721,
+    "max_thermal_estimate_a": 0.243,
+    "min_current_scale": 0.27,
+    "max_loop_gap_us": 17971
+  },
+  "1430": {
+    "armed_rows": 174,
+    "max_abs_uq_v": 1.935,
+    "peak_current_a": 0.741,
+    "max_thermal_estimate_a": 0.257,
+    "min_current_scale": 0.23,
+    "max_loop_gap_us": 17924
+  }
+}

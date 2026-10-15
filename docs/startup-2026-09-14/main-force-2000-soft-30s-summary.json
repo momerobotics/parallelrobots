@@ -1,0 +1,28 @@
+{
+  "1410": {
+    "armed_samples": 60,
+    "arm_events": 1,
+    "peak_current_a": 1.87,
+    "max_abs_uq_v": 5.31,
+    "hard_cuts": 0,
+    "speed_cuts": 5,
+    "min_thermal_scale": 0.35,
+    "max_thermal_estimate_a": 0.547,
+    "min_current_scale": 0.92,
+    "final_armed": 0,
+    "timer_stop_observed": true
+  },
+  "1430": {
+    "armed_samples": 60,
+    "arm_events": 1,
+    "peak_current_a": 1.82,
+    "max_abs_uq_v": 5.294,
+    "hard_cuts": 0,
+    "speed_cuts": 4,
+    "min_thermal_scale": 0.35,
+    "max_thermal_estimate_a": 0.547,
+    "min_current_scale": 0.9,
+    "final_armed": 0,
+    "timer_stop_observed": false
+  }
+}

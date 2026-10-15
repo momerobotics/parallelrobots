@@ -1,0 +1,21 @@
+{
+  "source_sha256": "e780c1b6c788f498d99e75697d23aedd3b47495109136d2c305c7d17d1bd1249",
+  "binary_sha256": "f16bfe9852b17a6c67894d52f105ff9b4388a796a7c95e80235d2a975d3eb3a0",
+  "upload_baud": 115200,
+  "profile": "force",
+  "curve": "Continuous piecewise linear from 0.01 rad deadband to 68% at 10 degrees, then 100% at 60 degrees",
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.75,
+  "hard_current_a": 2.0,
+  "thermal_soft_estimate_a": 0.9,
+  "thermal_hard_estimate_a": 1.1,
+  "thermal_time_constant_s": 45,
+  "force_attack_v_per_s": 80,
+  "trial_timeout_seconds": 30,
+  "automatic_start": false,
+  "validation": "Host checks, compilation, verified uploads and 30-second powered comparison completed. One arm per node; A timer stop and B peer stop; both disabled. Operator reports approximately unchanged feel and motor surface 31 C to 32 C. Same-voltage comparison only; extra SVPWM voltage headroom untested.",
+  "error_filter": false,
+  "status": "Comparison complete and archived. Saved SinePWM baseline restored successfully on both boards after interrupted-upload recovery; both disabled.",
+  "pwm": "centered SpaceVectorPWM",
+  "motor_surface_baseline_c": 31
+}

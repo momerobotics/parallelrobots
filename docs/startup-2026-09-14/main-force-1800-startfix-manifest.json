@@ -1,0 +1,16 @@
+{
+  "source_sha256": "d682dc10d4e2c4f999a8b4c1fdfc03874c5e0a5b979e247d41937c8e6f8d055e",
+  "binary_sha256": "38ae814c67e94d83f3ac0d3ed42ba2d979f3f0b7e744c4658bdf073adab5e1b2",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 10,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.5,
+  "hard_current_a": 1.8,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 10,
+  "validation": "Peer-start regression and haptic host checks passed; ESP32 compilation passed; uploads pending.",
+  "interaction_slew": false,
+  "startup_engagement_ms": 500
+}

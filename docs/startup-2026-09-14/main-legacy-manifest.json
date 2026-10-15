@@ -1,0 +1,13 @@
+{
+  "source_sha256": "331914452d0b5d8968a96b44074bb20a2dd1a4597a3a08fe99c5621797792a18",
+  "binary_sha256": "17af4d3104aa7e3b0358c01e3fbebccb8e95f695e1866e698f9cc2bfd20388d9",
+  "upload_baud": 115200,
+  "profile": "legacy",
+  "spring_v_per_rad": 2,
+  "voltage_limit": 3.5,
+  "soft_current_a": 1.1,
+  "hard_current_a": 1.35,
+  "trial_timeout_seconds": 30,
+  "automatic_start": false,
+  "validation": "Host checks and ESP32 compile passed; both uploads hash-verified at 115200 baud. Trial manually stopped early after repeated speed cuts and one hard-current cut. Both nodes confirmed disabled. User assessment pending; firmware 30-second timeout not reached in this trial."
+}

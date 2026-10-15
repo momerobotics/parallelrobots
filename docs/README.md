@@ -5,8 +5,13 @@ documentation for the Parallel Mirror Steer-by-Wire research prototype.
 
 ## Start Here
 
+- [Current installed build and end-of-day record](startup-2026-09-14/end-of-day.md)
+
 - [Project overview and setup](../README.md)
 - [Supervised operation guide](HANDOFF.md)
+- [New system: detailed manual commissioning](new-system-commissioning.md)
+- [Commissioning record template](commissioning-record-template.md)
+- [Deferred commissioning improvements](future-development.md)
 - [Reproduction guide](reproducibility.md)
 - [Prototype readiness checklist](prototype-checklist.md)
 - [Development log](development-log.md)
@@ -26,9 +31,8 @@ documentation for the Parallel Mirror Steer-by-Wire research prototype.
 
 ## Language
 
-English is the primary language of the repository documentation.
-[`HANDOFF-HU.md`](HANDOFF-HU.md) is retained as a Hungarian translation of the
-supervised operation guide for local operators.
+All project documentation is maintained in English, including operating guides,
+commissioning procedures, measurement records, firmware guides and development notes.
 
 ## Safety Status
 

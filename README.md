@@ -67,6 +67,16 @@ This produces a bilateral coupling effect that feels like shared resistance rath
 
 ## Current Prototype Status
 
+For current installed settings and resumption, see the
+[2026-09-14 end-of-day baseline](docs/startup-2026-09-14/end-of-day.md).
+The saved version is knee10-no-filter; oscillation remains an open issue.
+
+The results below describe the original pair. For the September replacement
+pair, basic encoder/current/phase tests, repeated FOC calibration, radio pairing
+and supervised main-firmware bench trials have been completed. Oscillation and
+on-body acceptance remain open. Follow the
+[manual commissioning guide](docs/new-system-commissioning.md).
+
 - validated `ESP32 FOC` board pin mapping
 - stable open-loop motor test completed
 - working `ESP-NOW` communication between two boards
@@ -150,7 +160,7 @@ The handoff build and its limits have not been validated outside that setup.
 The current implementation uses a simple but effective haptic coupling model:
 
 1. local shaft angle is sampled continuously
-2. angle data is transmitted to the peer node at about `500 Hz`
+2. angle data is sent to the peer at up to `100 Hz`, with one packet in flight
 3. the angular difference is measured locally
 4. a deadband removes small offsets around zero
 5. the remaining error is shaped through a nonlinear spring curve
@@ -161,13 +171,15 @@ Key runtime parameters in the current sketch:
 | Parameter | Value | Meaning |
 | --- | --- | --- |
 | `CHANNEL` | `1` | fixed communication channel |
-| `SEND_US` | `2000` | about `500 Hz` send rate |
+| `SEND_US` | `10000` | up to `100 Hz` send attempts |
 | `TIMEOUT_MS` | `250` | link timeout threshold |
-| power-stage ceiling | `7.0 V` | board-level voltage ceiling |
-| handoff command ceiling | `2.50 V` | boost spring output ceiling |
-| boost soft/hard current | `0.52/0.70 A` | fast current foldback envelope |
-| sustained thermal current | `0.45/0.60 A` | thermal derating envelope |
-| deadband | `0.025 rad` | no-resistance zone around zero |
+| power-stage ceiling | `7.0 V`; boot-estimated supply for force | profile-dependent driver limit |
+| boost / force command ceiling | `3.50 / 5.50 V` | also capped at half the driver voltage range |
+| boost / force soft-hard current | `1.10–1.35 / 1.75–2.00 A` | software current foldback thresholds |
+| thermal estimate soft-hard thresholds | `0.45–0.60 A`; force `0.90–1.10 A` | current-based estimate, not measured temperature |
+| force deadband | `0.01 rad` | no-resistance zone around zero |
+| force curve | `68%` at `10°`, `100%` at `60°` | voltage demand before protective limits |
+| force session | `120 s` | supervised trial timeout |
 | PWM carrier | `40 kHz` | synchronized sine PWM |
 
 ## Software
@@ -183,27 +195,23 @@ validated M0 mapping (`PWM 32/33/25`, enable `12`) and AS5048A SPI mapping
 validated, unwrapped encoder positions over ESP-NOW while keeping both motor
 drivers disabled.
 
-The autonomous bilateral controller is in `firmware/MKS_Parallel_Mirror/`.
-Both nodes load their stored FOC calibration, establish the ESP-NOW link, zero
-their local coordinates, and arm automatically after startup. No USB host or
-serial command is required during normal operation. A real link timeout disables
-the local power stage. Development builds can recover automatically; the
-published handoff build latches a runtime link fault until both nodes are fully
-power-cycled.
+The bilateral controller is in `firmware/MKS_Parallel_Mirror/`. The current
+replacement-pair build loads source-configured FOC calibration and starts with
+both motors disabled (`HANDOFF_MODE=false`, `autoStartEnabled=false`). Select
+matching profiles while stopped, then send `a` to request coordinated arming;
+`x` stops. Each node establishes its local zero when it arms.
 
-The current prototype uses a `7 V` power-stage ceiling with a `2.50 V` handoff
-command ceiling. Position error, shaft speed, measured phase current, and an
-estimated sustained thermal load are handled with continuous foldback.
+Profiles are gentle, normal, strong, boost, legacy, and force. Force is selected
+with `f` on each node and is not saved across reboots. It uses the saved
+**knee10-no-filter** SinePWM configuration, with an 80 V/s magnitude attack and
+immediate release. Oscillation remains unresolved. Current, speed, and estimated
+thermal-load foldback are software protections, not validated continuous ratings.
 
-Development builds provide gentle, normal, strong, and boost profiles. The
-protocol-7 handoff build locks both nodes to the tested boost profile, disables
-calibration and profile tuning commands, waits 5 seconds before synchronized
-arming, stops after 10 minutes, and latches off after a runtime link fault.
-
-For standalone testing, disconnect USB from both boards and cycle both external
-motor supplies. Keep both mechanisms free during the approximately `5 s`
-automatic startup interval. Follow the
-[`supervised operation guide`](docs/HANDOFF.md).
+A link timeout disables the local power stage. This development configuration
+can recover automatically; powered link-loss acceptance for this pair remains
+open. The earlier autonomous handoff behavior belongs to the original pair.
+For current startup and resumption, follow the
+[saved baseline procedure](docs/startup-2026-09-14/end-of-day.md).
 
 ### Onboard RGB LED Hardware Erratum
 
@@ -239,12 +247,15 @@ Main libraries:
 ### Requirements
 
 - Arduino IDE or Arduino CLI
-- Espressif ESP32 Arduino core `3.3.10`
+- Espressif ESP32 Arduino core (original build: `3.3.10`; current compile check: `3.3.12`)
 - Simple FOC `2.4.0`
 - board target `ESP32 Dev Module` (`esp32:esp32:esp32`)
 
 The complete versioned build, wiring, commissioning, and acceptance procedure
-is in the [reproduction guide](docs/reproducibility.md).
+is in the [manual new-system guide](docs/new-system-commissioning.md)
+with a
+[fillable assembly record](docs/commissioning-record-template.md).
+The [reproduction guide](docs/reproducibility.md) retains the original configuration.
 
 ### Wiring
 
@@ -258,13 +269,15 @@ The sketch contains both validated MAC addresses and identifies node A or B
 automatically:
 
 ```cpp
-static const uint8_t MAC_A[6]={0x30,0xC9,0x22,0x5F,0x5D,0x1C};
-static const uint8_t MAC_B[6]={0x30,0xC9,0x22,0x5F,0x5D,0x24};
+static const uint8_t MAC_A[6]={0x30,0xC9,0x22,0x5F,0x5E,0x2C};
+static const uint8_t MAC_B[6]={0x88,0x57,0x21,0x19,0xD5,0x70};
 ```
 
 ### First Power-Up Checklist
 
-- run `MKS_Bilateral_Link_Test` before enabling either motor
+- follow the manual guide: independent encoder/MAC checks, current/VIN checks,
+  short phase tests, accepted FOC calibration, then controlled main commissioning
+- update both station MAC arrays and validate `MKS_Bilateral_Link_Test` on both nodes
 - confirm both AS5048A encoders report valid, continuous angles
 - check current-sense offsets with `MKS_Current_Sense_Diagnostic`
 - verify the board-specific MAC addresses and electrical-zero calibration
@@ -278,14 +291,14 @@ The main tactile parameters are:
 - each `ControlProfile` entry's `voltageLimit` and `springK`
 - `frictionComp`, `positionI`, and the integral limits
 - `viscousDamping` and `couplingDamping`
-- `DEAD_BAND` for center free-play
-- `SOFTEN_EXP` for softening the near-zero response
+- each profile's `deadBand` and `softenExponent` for the near-zero response
+- the force profile's knee angle and voltage-demand fraction in `springTorque()`
 - `SEND_US` for communication update frequency
 - `TIMEOUT_MS` for disengagement speed after link loss
 
-The published protocol-7 handoff build has `HANDOFF_MODE=true`; it locks both
-nodes to the validated boost profile and disables serial tuning commands.
-Parameter changes belong in a development build and require repeated current,
+The current protocol-7 commissioning build has `HANDOFF_MODE=false` and requires
+stopped operation for profile changes. The original handoff mode locked the
+profile and disabled serial tuning. Parameter changes require repeated current,
 thermal, fault-recovery, and tactile validation.
 
 ## Prototype Limitations
@@ -309,7 +322,6 @@ thermal, fault-recovery, and tactile validation.
 - firmware guide: [`firmware/README.md`](firmware/README.md)
 - reproduction guide: [`docs/reproducibility.md`](docs/reproducibility.md)
 - supervised operation guide: [`docs/HANDOFF.md`](docs/HANDOFF.md)
-- Hungarian operator translation: [`docs/HANDOFF-HU.md`](docs/HANDOFF-HU.md)
 - development summary: [`docs/development-log.md`](docs/development-log.md)
 - prototype readiness checklist:
   [`docs/prototype-checklist.md`](docs/prototype-checklist.md)
@@ -319,6 +331,10 @@ thermal, fault-recovery, and tactile validation.
 - board reference image: `docs/board-overview.png`
 
 ## Future Directions
+
+Unified commissioning firmware, persistent calibration and simplified pairing
+are [explicitly deferred](docs/future-development.md). The current version
+continues to use manual measurements and source configuration.
 
 - complete instrumented thermal and externally calibrated current tests
 - add continuous battery and motor-temperature monitoring

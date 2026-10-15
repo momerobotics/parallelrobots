@@ -1,0 +1,7 @@
+{
+  "normal_slew_v_per_s": 6.0,
+  "plus_1_5_to_minus_1_5_seconds": 0.5,
+  "plus_5_5_to_minus_5_5_seconds": 1.8333333333333333,
+  "plus_3_to_zero_seconds": 0.5,
+  "interpretation": "Ideal uninterrupted ramp times when no hard-current cut or faster foldback ramp overrides the normal path; not measured closed-loop response times."
+}

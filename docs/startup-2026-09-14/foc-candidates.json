@@ -1,0 +1,92 @@
+{
+  "A": {
+    "port": "1410",
+    "station_mac": "30:C9:22:5F:5E:2C",
+    "direction": "CCW",
+    "candidates": [
+      {
+        "valid": "1",
+        "direction": "CCW",
+        "zeroE": "1.562826",
+        "forwardDeg": "-30.520",
+        "reverseDeg": "30.468",
+        "returnErrorDeg": "-0.052",
+        "ppForward": "11.796",
+        "ppReverse": "11.816",
+        "samples": "151",
+        "alignUq": "0.70"
+      },
+      {
+        "valid": "1",
+        "direction": "CCW",
+        "zeroE": "1.566572",
+        "forwardDeg": "-32.432",
+        "reverseDeg": "30.448",
+        "returnErrorDeg": "-1.984",
+        "ppForward": "11.100",
+        "ppReverse": "11.823",
+        "samples": "151",
+        "alignUq": "0.70"
+      }
+    ],
+    "zero_difference_rad": 0.003746000000000027,
+    "accepted_zero_rad": 1.566572,
+    "verification": {
+      "valid": "1",
+      "home1Deg": "0.022",
+      "positiveDeg": "7.734",
+      "home2Deg": "1.011",
+      "negativeDeg": "-8.108",
+      "home3Deg": "-1.099"
+    },
+    "operator_observation": "Normal motion on both motors; no abnormal noise or strong jerking.",
+    "accepted": true,
+    "vin_scale": 8.29,
+    "vin_meter_calibrated": false
+  },
+  "B": {
+    "port": "1430",
+    "station_mac": "88:57:21:19:D5:70",
+    "direction": "CCW",
+    "candidates": [
+      {
+        "valid": "1",
+        "direction": "CCW",
+        "zeroE": "4.839070",
+        "forwardDeg": "-30.256",
+        "reverseDeg": "30.242",
+        "returnErrorDeg": "-0.015",
+        "ppForward": "11.898",
+        "ppReverse": "11.904",
+        "samples": "150",
+        "alignUq": "0.70"
+      },
+      {
+        "valid": "1",
+        "direction": "CCW",
+        "zeroE": "4.843634",
+        "forwardDeg": "-31.289",
+        "reverseDeg": "30.350",
+        "returnErrorDeg": "-0.939",
+        "ppForward": "11.506",
+        "ppReverse": "11.862",
+        "samples": "151",
+        "alignUq": "0.70"
+      }
+    ],
+    "zero_difference_rad": 0.004563999999999346,
+    "accepted_zero_rad": 4.843634,
+    "verification": {
+      "valid": "1",
+      "home1Deg": "0.000",
+      "positiveDeg": "7.427",
+      "home2Deg": "-0.088",
+      "negativeDeg": "-7.888",
+      "home3Deg": "-0.242"
+    },
+    "operator_observation": "Normal motion on both motors; no abnormal noise or strong jerking.",
+    "accepted": true,
+    "vin_scale": 8.29,
+    "vin_meter_calibrated": false
+  }
+}

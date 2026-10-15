@@ -1,0 +1,21 @@
+{
+  "source_sha256": "cba7d2827fd9c4f6413b2f374f0bb866c8b72735c79103a0807f0482159d44f3",
+  "binary_sha256": "b1576d86a8ab6e75422fc87462803ebf10b213dfbb892f42e969cc8ab2cd7c72",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 10,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.75,
+  "hard_current_a": 2.0,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 10,
+  "validation": "Both uploads verified at 115200 baud. One arm per node; both 10-second timer stops observed. Peaks 0.662/1.277 A; no current or thermal foldback in recorded armed samples. User assessment pending; lower load means peak-force equivalence was not established.",
+  "interaction_slew": false,
+  "startup_engagement_ms": 500,
+  "radio_send_us": 10000,
+  "max_in_flight_packets": 1,
+  "start_grace_ms": 500,
+  "force_attack_v_per_s": 80,
+  "release_slew": false
+}

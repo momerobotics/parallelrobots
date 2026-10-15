@@ -1,0 +1,35 @@
+{
+  "1410": {
+    "armed_samples": 20,
+    "arm_events": 1,
+    "peak_current_a": 1.616,
+    "max_abs_uq_v": 4.305,
+    "hard_cuts": 0,
+    "speed_cuts": 5,
+    "min_thermal_scale": 1.0,
+    "min_current_scale": 0.77,
+    "final_armed": 0,
+    "timer_stop_observed": true,
+    "max_armed_age_ms": 9.0
+  },
+  "1430": {
+    "armed_samples": 19,
+    "arm_events": 1,
+    "peak_current_a": 1.668,
+    "max_abs_uq_v": 4.37,
+    "hard_cuts": 0,
+    "speed_cuts": 3,
+    "min_thermal_scale": 1.0,
+    "min_current_scale": 0.73,
+    "final_armed": 0,
+    "timer_stop_observed": false,
+    "max_armed_age_ms": 11.0
+  },
+  "controller_surface_temperature": {
+    "before_trial_c": 34,
+    "after_trial_c": 34,
+    "node": "unspecified",
+    "source": "user-reported UNI-T UT139C probe on controller",
+    "motor_temperature_c": null
+  }
+}

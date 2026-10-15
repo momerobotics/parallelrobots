@@ -11,7 +11,7 @@ static const int CURRENT_A_PIN=39, CURRENT_B_PIN=36;
 static const int SCK_PIN=18, MISO_PIN=19, MOSI_PIN=23, CS_PIN=5, VIN_PIN=13;
 // iPower GM3506 specification: 24N/22P, therefore 11 rotor pole pairs.
 static const int POLE_PAIRS=11;
-// Calibrated against both prototype boards at their input terminals.
+// Historical divider scale; replacement boards still need meter-based verification.
 static const float VIN_SCALE=8.29f, MIN_VIN=11.1f;
 static const float LIPO_EMPTY_VOLTAGE=10.5f, LIPO_FULL_VOLTAGE=12.6f;
 static const float ALIGN_VOLTAGE=1.0f;
@@ -23,6 +23,7 @@ static const float INTEGRAL_DECAY_V_PER_S=0.80f;
 static const float DEAD_BAND=0.025f, SOFTEN_EXP=1.20f;
 static const float VELOCITY_FILTER_TF=0.020f;
 static const float TORQUE_SLEW_V_PER_S=6.0f;
+static const float FORCE_ATTACK_V_PER_S=80.0f;
 static const float FOLDBACK_SLEW_V_PER_S=30.0f;
 static const float SPEED_SOFT_LIMIT=4.0f, SPEED_HARD_LIMIT=7.0f;
 static const float MAX_CONTROL_ERROR=3.50f;
@@ -30,43 +31,56 @@ static const float STRONG_ENDSTOP_START=0.90f;
 static const float STRONG_ENDSTOP_FULL=3.50f;
 static const float CURRENT_SOFT_LIMIT=0.40f;
 static const float OVERCURRENT_LIMIT=0.65f;
-static const float BOOST_CURRENT_SOFT_LIMIT=0.52f;
-static const float BOOST_OVERCURRENT_LIMIT=0.70f;
+static const float BOOST_CURRENT_SOFT_LIMIT=1.10f;
+static const float BOOST_OVERCURRENT_LIMIT=1.35f;
+static const float FORCE_CURRENT_SOFT_LIMIT=1.75f;
+static const float FORCE_OVERCURRENT_LIMIT=2.00f;
 static const float CURRENT_ENVELOPE_RELEASE_TF=0.080f;
 static const float THERMAL_ESTIMATE_TF=45.0f;
 static const float THERMAL_SOFT_CURRENT=0.45f;
 static const float THERMAL_HARD_CURRENT=0.60f;
+// Supervised two-minute force trial; current-based estimates, not temperature readings.
+static const float FORCE_THERMAL_SOFT_CURRENT=0.90f;
+static const float FORCE_THERMAL_HARD_CURRENT=1.10f;
 // Supervised handoff build: deterministic startup and latched runtime faults.
-static const bool HANDOFF_MODE=true;
+// Initial replacement-pair commissioning: explicit coordinated start only.
+static const bool HANDOFF_MODE=false;
 static const uint32_t HANDOFF_SESSION_MS=10UL*60UL*1000UL;
 static const uint8_t CHANNEL=1;
-static const uint32_t SEND_US=2000, TIMEOUT_MS=250, ARM_SYNC_MS=150;
+static const uint32_t SEND_US=10000, TIMEOUT_MS=250, ARM_SYNC_MS=150;
 static const uint32_t AUTO_START_DELAY_MS=5000, AUTO_RETRY_MS=1000;
 static const uint32_t MAGIC=0x50524F42;
 static const uint16_t PROTOCOL_VERSION=7;
 static const uint8_t FOC_READY=1, ARMED=2, RUN_ENABLED=4;
 enum ProfileId:uint8_t {
-  PROFILE_GENTLE=0,PROFILE_NORMAL=1,PROFILE_STRONG=2,PROFILE_BOOST=3,PROFILE_COUNT=4
+  PROFILE_GENTLE=0,PROFILE_NORMAL=1,PROFILE_STRONG=2,PROFILE_BOOST=3,PROFILE_LEGACY=4,PROFILE_FORCE=5,PROFILE_COUNT=6
 };
 static const uint8_t HANDOFF_PROFILE=PROFILE_BOOST;
 struct ControlProfile {
   const char*name;
   float voltageLimit,springK,frictionComp,positionI,integralLimit;
   float integralEnableError,viscousDamping,couplingDamping;
+  float deadBand,softenExponent;
 };
 static const ControlProfile PROFILES[PROFILE_COUNT]={
-  {"gentle",0.75f,0.80f,0.07f,0.10f,0.12f,0.10f,0.020f,0.025f},
-  {"normal",1.20f,1.20f,0.10f,0.15f,0.18f,0.075f,0.025f,0.025f},
-  {"strong",2.20f,1.30f,0.15f,0.24f,0.26f,0.060f,0.020f,0.040f},
-  {"boost",2.50f,1.42f,0.16f,0.26f,0.28f,0.055f,0.020f,0.045f}
+  {"gentle",0.75f,0.80f,0.07f,0.10f,0.12f,0.10f,0.020f,0.025f,DEAD_BAND,SOFTEN_EXP},
+  {"normal",1.20f,1.20f,0.10f,0.15f,0.18f,0.075f,0.025f,0.025f,DEAD_BAND,SOFTEN_EXP},
+  {"strong",2.20f,1.30f,0.15f,0.24f,0.26f,0.060f,0.020f,0.040f,DEAD_BAND,SOFTEN_EXP},
+  // Stronger small-angle response; short peak-current step with the original thermal envelope.
+  {"boost",3.50f,8.00f,0.16f,0.08f,0.10f,0.055f,0.140f,0.100f,0.008f,1.00f},
+  // Supervised comparison: original 2 V/rad spring, increased damping, existing guards.
+  {"legacy",3.50f,2.00f,0.00f,0.00f,0.00f,0.01f,0.140f,0.100f,0.010f,1.00f},
+  // Supervised force curve: 68% demand at 10 degrees, full demand at 60 degrees.
+  {"force",5.50f,5.252113f,0.00f,0.00f,0.00f,0.01f,0.000f,0.000f,0.010f,1.00f}
 };
 static const bool MASTER_FOLLOWER_TEST=false;
 static const char MASTER_NODE='A';
 static const bool USE_STORED_FOC_CALIBRATION=true;
-static const float ZERO_ELECTRIC_A=0.630083f;
-static const float ZERO_ELECTRIC_B=5.940915f;
-static const uint8_t MAC_A[6]={0x30,0xC9,0x22,0x5F,0x5D,0x1C};
-static const uint8_t MAC_B[6]={0x30,0xC9,0x22,0x5F,0x5D,0x24};
+// Replacement pair: repeated calibration and +/-8 degree FOC checks passed 2026-09-14.
+static const float ZERO_ELECTRIC_A=1.566572f;
+static const float ZERO_ELECTRIC_B=4.843634f;
+static const uint8_t MAC_A[6]={0x30,0xC9,0x22,0x5F,0x5E,0x2C};
+static const uint8_t MAC_B[6]={0x88,0x57,0x21,0x19,0xD5,0x70};
 
 struct __attribute__((packed)) Packet {
   uint32_t magic, sequence;
@@ -85,7 +99,7 @@ uint8_t localMac[6]={}, peerMac[6]={};
 char node='?';
 uint8_t activeProfile=PROFILE_NORMAL;
 float bootVin=0, zeroPosition=0, torqueVoltage=0;
-bool radioReady=false, focReady=false, armed=false, autoStartEnabled=true;
+bool radioReady=false, focReady=false, armed=false, autoStartEnabled=false;
 bool currentSenseReady=false;
 bool lowBattery=false;
 bool currentFoldbackActive=false;
@@ -97,7 +111,9 @@ volatile Packet remotePacket={};
 volatile uint32_t lastRxMs=0, rxCount=0;
 portMUX_TYPE packetMux=portMUX_INITIALIZER_UNLOCKED;
 uint32_t sequence=0, txCount=0, txFailures=0, lastSendUs=0, lastPrintMs=0;
-uint32_t currentLimitEvents=0;
+volatile bool txInFlight=false;
+uint32_t currentLimitEvents=0,hardCurrentEvents=0,hardSpeedEvents=0;
+bool wasHardCurrent=false,wasHardSpeed=false;
 float filteredVelocity=0, velocityPosition=0;
 float positionIntegral=0;
 float phaseCurrentA=0, phaseCurrentB=0, phaseCurrentC=0;
@@ -107,6 +123,19 @@ float thermalCurrentSq=0, estimatedThermalCurrent=0, activeThermalScale=1.0f;
 uint32_t velocityUpdateUs=0, controlUpdateUs=0, armedAtMs=0, nextAutoArmMs=0;
 uint32_t currentMonitorUs=0;
 uint32_t runIntentGraceUntilMs=0;
+uint32_t peerRestartBlockedUntilMs=0;
+uint32_t loopEnteredUs=0,maxLoopGapUs=0;
+
+// init() clamps the motor limit to the temporary alignment driver limit.
+// Restore both runtime limits, including SimpleFOC's internal controller limits.
+void configureRuntimeVoltageLimits(){
+  driver.voltage_limit=activeProfile==PROFILE_FORCE?
+    driver.voltage_power_supply:POWER_STAGE_VOLTAGE_LIMIT;
+  float requestedLimit=activeProfile==PROFILE_FORCE?
+    PROFILES[PROFILE_FORCE].voltageLimit:PROFILES[PROFILE_BOOST].voltageLimit;
+  // Centered SinePWM needs half of the phase voltage range for either Uq sign.
+  motor.updateVoltageLimit(min(requestedLimit,driver.voltage_limit*0.5f));
+}
 
 bool sameMac(const uint8_t*a,const uint8_t*b){return memcmp(a,b,6)==0;}
 float readVin(){
@@ -125,11 +154,18 @@ float coordinateSign(){return focReady?(float)motor.sensor_direction:1.0f;}
 float position(){return coordinateSign()*(sensor.getAngle()-zeroPosition);}
 float coordinateVelocity(){return coordinateSign()*sensor.getVelocity();}
 bool progressiveProfile(){return activeProfile==PROFILE_STRONG||activeProfile==PROFILE_BOOST;}
+float thermalSoftLimit(){return activeProfile==PROFILE_FORCE?FORCE_THERMAL_SOFT_CURRENT:THERMAL_SOFT_CURRENT;}
+float thermalHardLimit(){return activeProfile==PROFILE_FORCE?FORCE_THERMAL_HARD_CURRENT:THERMAL_HARD_CURRENT;}
+float thermalFoldback(float estimate){
+  return constrain((thermalHardLimit()-estimate)/(thermalHardLimit()-thermalSoftLimit()),0.0f,1.0f);
+}
 float currentSoftLimit(){
-  return activeProfile==PROFILE_BOOST?BOOST_CURRENT_SOFT_LIMIT:CURRENT_SOFT_LIMIT;
+  if(activeProfile==PROFILE_FORCE)return FORCE_CURRENT_SOFT_LIMIT;
+  return (activeProfile==PROFILE_BOOST||activeProfile==PROFILE_LEGACY)?BOOST_CURRENT_SOFT_LIMIT:CURRENT_SOFT_LIMIT;
 }
 float currentHardLimit(){
-  return activeProfile==PROFILE_BOOST?BOOST_OVERCURRENT_LIMIT:OVERCURRENT_LIMIT;
+  if(activeProfile==PROFILE_FORCE)return FORCE_OVERCURRENT_LIMIT;
+  return (activeProfile==PROFILE_BOOST||activeProfile==PROFILE_LEGACY)?BOOST_OVERCURRENT_LIMIT:OVERCURRENT_LIMIT;
 }
 
 void printMac(const uint8_t*m){
@@ -151,6 +187,7 @@ void onReceive(const esp_now_recv_info_t*info,const uint8_t*data,int len){
 }
 
 void onSend(const esp_now_send_info_t*,esp_now_send_status_t status){
+  txInFlight=false;
   if(status!=ESP_NOW_SEND_SUCCESS)txFailures++;
 }
 
@@ -179,18 +216,21 @@ bool initRadio(){
 }
 
 void sendState(){
+  if(txInFlight)return;
   uint8_t flags=(focReady?FOC_READY:0)|(armed?ARMED:0)|
                 (autoStartEnabled?RUN_ENABLED:0);
   Packet p={MAGIC,sequence++,PROTOCOL_VERSION,position(),filteredVelocity,
             flags,(uint8_t)node,activeProfile};
+  txInFlight=true;
   if(esp_now_send(peerMac,(uint8_t*)&p,sizeof(p))==ESP_OK)txCount++;
-  else txFailures++;
+  else{txInFlight=false;txFailures++;}
 }
 
 void disarm(const char*reason){
   torqueVoltage=0; positionIntegral=0;
   motor.move(0); motor.disable(); armed=false;
   nextAutoArmMs=millis()+AUTO_RETRY_MS;
+  peerRestartBlockedUntilMs=millis()+TIMEOUT_MS;
   strlcpy(lastDisarmReason,reason,sizeof(lastDisarmReason));
   Serial.print("DISARMED: "); Serial.println(reason);
 }
@@ -213,11 +253,13 @@ void updateCurrentMonitor(){
     float alpha=dt/(THERMAL_ESTIMATE_TF+dt);
     thermalCurrentSq+=alpha*(instantCurrentPeak*instantCurrentPeak-thermalCurrentSq);
     estimatedThermalCurrent=sqrtf(max(thermalCurrentSq,0.0f));
-    activeThermalScale=constrain((THERMAL_HARD_CURRENT-estimatedThermalCurrent)/
-                                 (THERMAL_HARD_CURRENT-THERMAL_SOFT_CURRENT),0.0f,1.0f);
+    activeThermalScale=thermalFoldback(estimatedThermalCurrent);
   }
   currentMonitorUs=now;
   if(armed)maxCurrentSinceArm=max(maxCurrentSinceArm,instantCurrentPeak);
+  bool hardCurrent=armed&&instantCurrentPeak>=currentHardLimit();
+  if(hardCurrent&&!wasHardCurrent)++hardCurrentEvents;
+  wasHardCurrent=hardCurrent;
 }
 
 void updateFilteredVelocity(){
@@ -235,12 +277,26 @@ void updateFilteredVelocity(){
 float springTorque(float error){
   const ControlProfile&profile=PROFILES[activeProfile];
   float m=fabsf(error);
-  if(m<=DEAD_BAND)return 0;
-  float travel=m-DEAD_BAND;
+  if(m<=profile.deadBand)return 0;
+  if(activeProfile==PROFILE_LEGACY)
+    return constrain(-profile.springK*error,-profile.voltageLimit,profile.voltageLimit);
+  if(activeProfile==PROFILE_FORCE){
+    // These fractions describe voltage demand, not measured torque or power.
+    // Start continuously at the deadband; preserve headroom above the knee.
+    const float knee=10.0f*3.14159265359f/180.0f;
+    const float full=60.0f*3.14159265359f/180.0f;
+    const float kneeFraction=0.68f;
+    float fraction=m<=knee?
+      kneeFraction*(m-profile.deadBand)/(knee-profile.deadBand):
+      kneeFraction+(1.0f-kneeFraction)*(m-knee)/(full-knee);
+    float magnitude=profile.voltageLimit*constrain(fraction,0.0f,1.0f);
+    return error>0?-magnitude:magnitude;
+  }
+  float travel=m-profile.deadBand;
   float friction=profile.frictionComp*(1.0f-expf(-travel/STATIC_FRICTION_RAMP));
   float springTravel=progressiveProfile()?
                      min(travel,STRONG_ENDSTOP_START):travel;
-  float magnitude=friction+profile.springK*powf(springTravel,SOFTEN_EXP);
+  float magnitude=friction+profile.springK*powf(springTravel,profile.softenExponent);
   if(progressiveProfile()&&travel>STRONG_ENDSTOP_START){
     float endstop=constrain((travel-STRONG_ENDSTOP_START)/
                             (STRONG_ENDSTOP_FULL-STRONG_ENDSTOP_START),0.0f,1.0f);
@@ -250,15 +306,26 @@ float springTorque(float error){
   return constrain(spring,-profile.voltageLimit,profile.voltageLimit);
 }
 
+// Rate-limit only growth in force magnitude. Release and foldback are immediate;
+// a reversal starts from zero so old-sign torque is never deliberately retained.
+float softenForceRequest(float previous,float requested,float dt){
+  if(previous*requested<0)previous=0;
+  if(fabsf(requested)<=fabsf(previous))return requested;
+  float magnitude=min(fabsf(requested),fabsf(previous)+FORCE_ATTACK_V_PER_S*max(dt,0.0f));
+  return requested<0?-magnitude:magnitude;
+}
+
 void selectProfile(uint8_t selected){
   if(HANDOFF_MODE){
     Serial.println("Profile selection locked in handoff mode");
     return;
   }
   if(selected>=PROFILE_COUNT)return;
+  if(armed){Serial.println("Stop before changing profile");return;}
   uint8_t previous=activeProfile;
   activeProfile=selected;
-  if(profileStorageReady&&activeProfile!=previous&&activeProfile!=PROFILE_BOOST)
+  configureRuntimeVoltageLimits();
+  if(profileStorageReady&&activeProfile!=previous&&activeProfile<=PROFILE_STRONG)
     preferences.putUChar("profile",activeProfile);
   positionIntegral=0;torqueVoltage=0;
   maxCurrentSinceArm=0;
@@ -307,7 +374,8 @@ void arm(){
   currentFoldbackActive=false;
   activeCurrentScale=1; activeSpeedScale=1;
   velocityUpdateUs=0; controlUpdateUs=micros();
-  armedAtMs=millis();
+  armedAtMs=millis();maxLoopGapUs=0;
+  hardCurrentEvents=hardSpeedEvents=0;wasHardCurrent=wasHardSpeed=false;
   if(!MASTER_FOLLOWER_TEST||node!=MASTER_NODE)motor.enable();
   armed=true;
   strlcpy(lastDisarmReason,"none",sizeof(lastDisarmReason));
@@ -326,7 +394,7 @@ void commands(){
   else if(c=='a'||c=='A'){
     if(lowBattery){Serial.println("Start refused: low boot VIN");return;}
     manualStopLatched=false;autoStartEnabled=true;
-    runIntentGraceUntilMs=millis()+150;nextAutoArmMs=millis();
+    runIntentGraceUntilMs=millis()+500;nextAutoArmMs=millis();
     Serial.println("Coordinated start requested");
   }
   else if(c=='x'||c=='X'){
@@ -341,13 +409,17 @@ void commands(){
   else if(c=='n'||c=='N')selectProfile(PROFILE_NORMAL);
   else if(c=='s'||c=='S')selectProfile(PROFILE_STRONG);
   else if(c=='b'||c=='B')selectProfile(PROFILE_BOOST);
+  else if(c=='l'||c=='L')selectProfile(PROFILE_LEGACY);
+  else if(c=='f'||c=='F')selectProfile(PROFILE_FORCE);
   else if(c=='?'){
     if(HANDOFF_MODE)Serial.println("HANDOFF: a=arm x=disarm; tuning commands locked");
-    else Serial.println("c=calibrate z=zero a=arm x=disarm g=gentle n=normal s=strong b=boost");
+    else Serial.println("c=calibrate z=zero a=arm x=disarm g=gentle n=normal s=strong b=boost l=legacy f=force");
   }
 }
 
 void status(){
+  // Never wait for UART transmission while motor/current control needs service.
+  if(Serial.availableForWrite()<1024)return;
   uint32_t age; Packet p=remoteState(age);
   Serial.print("node=");Serial.print(node);
   Serial.print(" foc=");Serial.print(focReady);
@@ -368,6 +440,8 @@ void status(){
   Serial.print(" local=");Serial.print(position(),3);
   Serial.print(" remote=");Serial.print(p.position,3);
   Serial.print(" torqueV=");Serial.print(torqueVoltage,3);
+  Serial.print(" uqV=");Serial.print(armed?motor.voltage.q:0.0f,3);
+  Serial.print(" motorLimitV=");Serial.print(motor.voltage_limit,2);
   Serial.print(" currentA=");Serial.print(phaseCurrentA,3);
   Serial.print(" currentB=");Serial.print(phaseCurrentB,3);
   Serial.print(" currentC=");Serial.print(phaseCurrentC,3);
@@ -381,10 +455,14 @@ void status(){
   Serial.print(" velocity=");Serial.print(filteredVelocity,2);
   Serial.print(" ageMs=");if(age==UINT32_MAX)Serial.print("never");else Serial.print(age);
   Serial.print(" txFail=");Serial.print(txFailures);
+  Serial.print(" hardCuts=");Serial.print(hardCurrentEvents);
+  Serial.print(" speedCuts=");Serial.print(hardSpeedEvents);
+  Serial.print(" loopMaxUs=");Serial.print(maxLoopGapUs);
   Serial.print(" rx=");Serial.println(rxCount);
 }
 
 void setup(){
+  Serial.setTxBufferSize(2048);
   Serial.begin(115200);delay(800);
   profileStorageReady=preferences.begin("parallel",false);
   if(HANDOFF_MODE){
@@ -420,7 +498,7 @@ void setup(){
     focReady=motor.initFOC()!=0;
     motor.disable();sensor.update();zeroPosition=sensor.getAngle();
   }
-  driver.voltage_limit=POWER_STAGE_VOLTAGE_LIMIT;
+  configureRuntimeVoltageLimits();
   nextAutoArmMs=millis()+AUTO_START_DELAY_MS;
   Serial.println("Parallel Robots MKS mirror - autonomous foldback build");
   Serial.print("Node ");Serial.print(node);Serial.print(" MAC ");printMac(localMac);
@@ -436,10 +514,13 @@ void setup(){
     Serial.println(HANDOFF_SESSION_MS/1000UL);
   }
   if(lowBattery)Serial.println("LOW BATTERY: automatic arm inhibited.");
-  Serial.println("Motor disabled during startup; automatic peer-synchronized arm enabled.");
+  Serial.println("Motor disabled during startup; inspect auto telemetry before coordinated arming.");
 }
 
 void loop(){
+  uint32_t enteredUs=micros();
+  if(loopEnteredUs)maxLoopGapUs=max(maxLoopGapUs,enteredUs-loopEnteredUs);
+  loopEnteredUs=enteredUs;
   commands();
   if(focReady)motor.loopFOC();else sensor.update();
   updateCurrentMonitor();
@@ -451,8 +532,11 @@ void loop(){
     peerRunKnown=true;
     peerRunLast=peerRun;
     bool localStarting=(int32_t)(runIntentGraceUntilMs-millis())>0;
-    if(peerRunRising&&!lowBattery&&(!HANDOFF_MODE||!manualStopLatched)){
+    if(peerRunRising&&!lowBattery&&(!HANDOFF_MODE||!manualStopLatched)&&
+       (int32_t)(millis()-peerRestartBlockedUntilMs)>=0){
       manualStopLatched=false;autoStartEnabled=true;
+      // The accepting peer needs the same handshake grace as the initiator.
+      runIntentGraceUntilMs=millis()+500;
       nextAutoArmMs=millis();
     }else if(!peerRun&&!localStarting){
       autoStartEnabled=false;
@@ -461,7 +545,12 @@ void loop(){
     }
   }
   if(armed){
-    if(HANDOFF_MODE&&millis()-armedAtMs>=HANDOFF_SESSION_MS){
+    if((activeProfile==PROFILE_FORCE&&millis()-armedAtMs>=120000UL)||
+       (activeProfile==PROFILE_LEGACY&&millis()-armedAtMs>=30000UL)){
+      manualStopLatched=true;autoStartEnabled=false;runIntentGraceUntilMs=0;
+      disarm("supervised trial complete");
+    }
+    else if(HANDOFF_MODE&&millis()-armedAtMs>=HANDOFF_SESSION_MS){
       manualStopLatched=true;autoStartEnabled=false;runIntentGraceUntilMs=0;
       disarm("handoff session complete");
     }
@@ -493,6 +582,10 @@ void loop(){
         activeSpeedScale=constrain((SPEED_HARD_LIMIT-speed)/
                                    (SPEED_HARD_LIMIT-SPEED_SOFT_LIMIT),0.0f,1.0f);
 
+        bool hardSpeed=activeSpeedScale<=0;
+        if(hardSpeed&&!wasHardSpeed)++hardSpeedEvents;
+        wasHardSpeed=hardSpeed;
+
         float softCurrent=currentSoftLimit();
         float hardCurrent=currentHardLimit();
         activeCurrentScale=currentSenseReady?
@@ -507,7 +600,7 @@ void loop(){
           currentFoldbackActive=false;
         }
         float errorMagnitude=fabsf(error);
-        if(errorMagnitude<=DEAD_BAND)positionIntegral=0;
+        if(errorMagnitude<=profile.deadBand)positionIntegral=0;
         else if(errorMagnitude>=profile.integralEnableError&&
                 activeCurrentScale>0.95f&&activeSpeedScale>0.95f)
           positionIntegral=constrain(positionIntegral-profile.positionI*controlledError*dt,
@@ -524,9 +617,18 @@ void loop(){
                       profile.couplingDamping*relativeVelocity;
         float requested=(drive-damping)*activeCurrentScale*activeThermalScale;
         requested=constrain(requested,-profile.voltageLimit,profile.voltageLimit);
+        // Force trial: soften only initial engagement. During interaction follow
+        // releases immediately; subsequent magnitude growth uses a short attack ramp.
+        if(activeProfile==PROFILE_FORCE){
+          float engagement=constrain((millis()-armedAtMs-ARM_SYNC_MS)/500.0f,0.0f,1.0f);
+          requested*=engagement;
+        }
         float slew=activeCurrentScale<0.95f?FOLDBACK_SLEW_V_PER_S:TORQUE_SLEW_V_PER_S;
         float step=slew*dt;
-        torqueVoltage+=constrain(requested-torqueVoltage,-step,step);
+        // A hard-current event bypasses the slew ramp and removes drive immediately.
+        if(currentSenseReady&&instantCurrentPeak>=hardCurrent)torqueVoltage=0;
+        else if(activeProfile==PROFILE_FORCE)torqueVoltage=softenForceRequest(torqueVoltage,requested,dt);
+        else torqueVoltage+=constrain(requested-torqueVoltage,-step,step);
         motor.move(torqueVoltage);
       }
     }

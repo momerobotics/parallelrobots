@@ -1,0 +1,20 @@
+{
+  "1410": {
+    "armed_samples": 41,
+    "peak_current_a": 1.192,
+    "max_abs_uq_v": 3.275,
+    "hard_cuts": 0,
+    "speed_cuts": 19,
+    "min_thermal_scale": 1.0,
+    "final_armed": 0
+  },
+  "1430": {
+    "armed_samples": 40,
+    "peak_current_a": 1.197,
+    "max_abs_uq_v": 3.352,
+    "hard_cuts": 0,
+    "speed_cuts": 17,
+    "min_thermal_scale": 1.0,
+    "final_armed": 0
+  }
+}

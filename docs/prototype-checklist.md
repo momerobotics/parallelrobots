@@ -3,7 +3,7 @@
 This checklist separates the validated control proof of concept from the work
 still required for a repeatable, mechanically integrated prototype.
 
-## Validated
+## Validated on the original pair
 
 - AS5048A SPI position sensing on both MKS ESP32 FOC Mega boards
 - stored FOC calibration for both GM3506 motors (`11` pole pairs)
@@ -20,6 +20,26 @@ still required for a repeatable, mechanically integrated prototype.
 - protocol-7 supervised handoff mode with fixed profile, 5-second startup,
   10-minute session limit, locked tuning commands, and latched runtime link faults
 - versioned build instructions and a staged reproduction procedure
+
+## September replacement pair
+
+The new physical boards and motor/encoder assemblies require their own
+[manual commissioning record](commissioning-record-template.md). See the
+[procedure](new-system-commissioning.md) and [actual logs](startup-2026-09-14/README.md).
+
+- Passed: encoder/current/phase checks, repeated FOC calibration from changed
+  positions, independent two-direction FOC checks, radio movement exchange and
+  link loss/recovery, gentle bilateral response and coordinated manual stop.
+- Adopted calibration: A=1.566572 rad, B=4.843634 rad, both CCW. Main/link
+  source uses the replacement pair's MACs.
+- Pending: meter-based VIN/current verification, stronger-profile stability and
+  actual-mounting feedback, final handoff/fault/thermal acceptance.
+- A hidden 1 V runtime motor limit was found and fixed. The first stronger
+  profile produced occasional oscillation. The saved knee10-no-filter force
+  baseline completed a supervised two-minute trial; oscillation remains open.
+  See the [final September record](startup-2026-09-14/end-of-day.md).
+- Unified firmware, persistent calibration and simplified pairing are
+  [deferred developments](future-development.md); the current workflow stays manual.
 
 ## P0 - Before Unattended or Extended Testing
 

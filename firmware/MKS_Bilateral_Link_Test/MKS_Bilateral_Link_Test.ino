@@ -17,8 +17,8 @@ static const uint8_t ESPNOW_CHANNEL = 1;
 static const uint32_t SEND_PERIOD_US = 2000;
 static const uint32_t LINK_TIMEOUT_MS = 250;
 
-static const uint8_t MAC_A[6] = {0x30, 0xC9, 0x22, 0x5F, 0x5D, 0x1C};
-static const uint8_t MAC_B[6] = {0x30, 0xC9, 0x22, 0x5F, 0x5D, 0x24};
+static const uint8_t MAC_A[6] = {0x30,0xC9,0x22,0x5F,0x5E,0x2C};
+static const uint8_t MAC_B[6] = {0x88,0x57,0x21,0x19,0xD5,0x70};
 
 struct __attribute__((packed)) LinkPacket {
   uint32_t magic;

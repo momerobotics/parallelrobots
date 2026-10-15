@@ -1,0 +1,25 @@
+{
+  "source_sha256": "68d9c5501a0e74479e735ecd70c79c67443a91a03213a3041275455321f05fac",
+  "binary_sha256": "93b1e5b95a586e6f61a5e774170cd2fc1c7e1bce9e12da038337ec0fa8b52a79",
+  "upload_baud": 115200,
+  "profile": "force",
+  "curve": "Continuous piecewise linear from 0.01 rad deadband to 68% at 10 degrees, then 100% at 60 degrees",
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.75,
+  "hard_current_a": 2.0,
+  "thermal_soft_estimate_a": 0.9,
+  "thermal_hard_estimate_a": 1.1,
+  "thermal_time_constant_s": 45,
+  "force_error_filter_time_constant_s": 0.02,
+  "force_error_filter_max_lag_deg": 0.35,
+  "force_attack_v_per_s": 80,
+  "trial_timeout_seconds": 120,
+  "automatic_start": false,
+  "validation": "Host tests, compilation and both uploads passed. Supervised 120-second session completed with one arm per node, A timer stop and B peer stop. Both disabled. Initial portion had little motion/load. User reports motor surface 26 C then 27 C; final temperature and feel pending.",
+  "boot_voltage_estimates_v": {
+    "A": 11.34,
+    "B": 11.22
+  },
+  "motor_surface_baseline_c": 26,
+  "physical_acceptance": "Rejected: user reports noticeably worse oscillation; final motor surface temperature 31 C. Reverted to exact knee25 source snapshot."
+}

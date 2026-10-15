@@ -1,0 +1,28 @@
+{
+  "1410": {
+    "armed_rows": 50,
+    "max_abs_uq_v": 3.302,
+    "peak_current_a": 1.304,
+    "max_thermal_estimate_a": 0.466,
+    "min_current_scale": 0.47,
+    "min_speed_scale": 0.0,
+    "min_thermal_scale": 0.89,
+    "hard_current_cut_events": 0.0,
+    "hard_speed_cut_events": 8.0,
+    "max_loop_gap_us": 18043.0,
+    "final_armed": 0
+  },
+  "1430": {
+    "armed_rows": 50,
+    "max_abs_uq_v": 3.306,
+    "peak_current_a": 1.21,
+    "max_thermal_estimate_a": 0.472,
+    "min_current_scale": 0.77,
+    "min_speed_scale": 1.0,
+    "min_thermal_scale": 0.85,
+    "hard_current_cut_events": 0.0,
+    "hard_speed_cut_events": 2.0,
+    "max_loop_gap_us": 18005.0,
+    "final_armed": 0
+  }
+}

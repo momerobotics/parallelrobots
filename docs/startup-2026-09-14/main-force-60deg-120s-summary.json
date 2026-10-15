@@ -1,0 +1,48 @@
+{
+  "trial_seconds": 120,
+  "motor_surface_temperature_c": {
+    "baseline": 25,
+    "reported_during_trial": [
+      26,
+      27,
+      28
+    ],
+    "final_after_stop": null,
+    "node": "unspecified",
+    "note": "User-reported external probe readings; exact timestamps unavailable.",
+    "maximum_reported_c": 30
+  },
+  "nodes": {
+    "A": {
+      "armed_samples": 240,
+      "arm_events": 1,
+      "peak_current_a": 1.967,
+      "max_abs_uq_v": 5.5,
+      "min_thermal_scale": 0.54,
+      "max_thermal_estimate_a": 0.841,
+      "min_current_scale": 0.83,
+      "hard_cuts": 0,
+      "speed_cuts": 32,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": true,
+      "peer_stop_observed": false
+    },
+    "B": {
+      "armed_samples": 240,
+      "arm_events": 1,
+      "peak_current_a": 1.833,
+      "max_abs_uq_v": 5.5,
+      "min_thermal_scale": 0.58,
+      "max_thermal_estimate_a": 0.834,
+      "min_current_scale": 0.89,
+      "hard_cuts": 0,
+      "speed_cuts": 18,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": false,
+      "peer_stop_observed": true
+    }
+  },
+  "operator_feedback": "Noticeable output reduction during the trial. Requests stronger small-angle feedback: reach 85\u201390% near 20\u201325 degrees with further gradual growth above it."
+}

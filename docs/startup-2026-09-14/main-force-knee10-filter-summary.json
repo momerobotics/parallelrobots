@@ -1,0 +1,44 @@
+{
+  "trial_seconds": 120,
+  "motor_surface_baseline_c": 26,
+  "motor_surface_readings_c": [
+    26,
+    27
+  ],
+  "final_temperature_c": 31,
+  "operator_assessment": "Oscillation noticeably worse. User requests reverting to the previous version without the new filter. Rejected for continued use.",
+  "nodes": {
+    "A": {
+      "armed_samples": 240,
+      "samples_above_half_volt": 117,
+      "arm_events": 1,
+      "peak_current_a": 1.908,
+      "max_abs_uq_v": 5.5,
+      "min_thermal_scale": 0.8,
+      "max_thermal_estimate_a": 0.94,
+      "min_current_scale": 0.87,
+      "hard_cuts": 0,
+      "speed_cuts": 98,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": true,
+      "peer_stop_observed": false
+    },
+    "B": {
+      "armed_samples": 240,
+      "samples_above_half_volt": 107,
+      "arm_events": 1,
+      "peak_current_a": 1.844,
+      "max_abs_uq_v": 5.5,
+      "min_thermal_scale": 0.8,
+      "max_thermal_estimate_a": 0.941,
+      "min_current_scale": 0.94,
+      "hard_cuts": 0,
+      "speed_cuts": 86,
+      "final_armed": 0,
+      "final_auto": 0,
+      "timer_stop_observed": false,
+      "peer_stop_observed": true
+    }
+  }
+}

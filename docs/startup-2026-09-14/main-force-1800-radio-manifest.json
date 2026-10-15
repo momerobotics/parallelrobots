@@ -1,0 +1,19 @@
+{
+  "source_sha256": "b1500ba1bfe91edb5042e8e058b0eb610a73184431336be54fe45b109b8b51c9",
+  "binary_sha256": "ee12d4c63675e18d5be9d601a84287f932cf09f4f3e03da42158432a89d5b4b3",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 10,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.5,
+  "hard_current_a": 1.8,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 10,
+  "validation": "Both uploads verified at 115200 baud. Valid 10-second loaded trial completed with one arm per node, A timer stop and B peer stop. Peaks 1.616/1.668 A; no hard-current cuts or thermal foldback. User force and post-trial controller temperature pending. Repeated restart validation still pending.",
+  "interaction_slew": false,
+  "startup_engagement_ms": 500,
+  "radio_send_us": 10000,
+  "max_in_flight_packets": 1,
+  "start_grace_ms": 500
+}

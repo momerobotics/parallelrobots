@@ -1,0 +1,16 @@
+{
+  "source_sha256": "54dc258da0bb894291f6de276137419088c1ee445d60457f63983b5c3a816940",
+  "binary_sha256": "aaf4a44c72439f49fd082c1da1e4edbb17432d6d64e982b916c25cca5d86ace2",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 10,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.5,
+  "hard_current_a": 1.8,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 10,
+  "validation": "Both uploads verified at 115200 baud. First short trial contained negligible relative movement and did not exercise force/current capability. Manual/peer stop confirmed; firmware timer completion not observed. Await user-ready signal for meaningful repeat and numerical temperature readings.",
+  "interaction_slew": false,
+  "startup_engagement_ms": 500
+}

@@ -1,0 +1,122 @@
+{
+  "1410": {
+    "complete_records": 233,
+    "start": {
+      "ms": "644821",
+      "MAC": "30:C9:22:5F:5E:2C",
+      "motor": "DISABLED",
+      "encoder": "OK",
+      "angleDeg": "175.957",
+      "travelDeg": "-1.604",
+      "angleFrame": "9F48",
+      "diagFrame": "01C1",
+      "magFrame": "11BE",
+      "AGC": "193",
+      "OCF": "1",
+      "COF": "0",
+      "compHigh": "0",
+      "compLow": "0",
+      "magnitude": "4542",
+      "samples": "61839",
+      "badFrames": "0",
+      "parityErrors": "0",
+      "errorFlags": "0",
+      "unhealthySamples": "0"
+    },
+    "end": {
+      "ms": "760821",
+      "MAC": "30:C9:22:5F:5E:2C",
+      "motor": "DISABLED",
+      "encoder": "OK",
+      "angleDeg": "265.276",
+      "travelDeg": "807.715",
+      "angleFrame": "2F29",
+      "diagFrame": "01C4",
+      "magFrame": "1196",
+      "AGC": "196",
+      "OCF": "1",
+      "COF": "0",
+      "compHigh": "0",
+      "compLow": "0",
+      "magnitude": "4502",
+      "samples": "72975",
+      "badFrames": "0",
+      "parityErrors": "0",
+      "errorFlags": "0",
+      "unhealthySamples": "0"
+    },
+    "travel_range_deg": [
+      -494.604,
+      809.033
+    ],
+    "positive_steps_over_1deg": 9,
+    "negative_steps_over_1deg": 6,
+    "all_samples_healthy": true,
+    "max_counters": {
+      "badFrames": 0,
+      "parityErrors": 0,
+      "errorFlags": 0,
+      "unhealthySamples": 0
+    }
+  },
+  "1430": {
+    "complete_records": 224,
+    "start": {
+      "ms": "619321",
+      "MAC": "88:57:21:19:D5:70",
+      "motor": "DISABLED",
+      "encoder": "OK",
+      "angleDeg": "295.598",
+      "travelDeg": "0.220",
+      "angleFrame": "B48D",
+      "diagFrame": "01C4",
+      "magFrame": "9198",
+      "AGC": "196",
+      "OCF": "1",
+      "COF": "0",
+      "compHigh": "0",
+      "compLow": "0",
+      "magnitude": "4504",
+      "samples": "59393",
+      "badFrames": "0",
+      "parityErrors": "0",
+      "errorFlags": "0",
+      "unhealthySamples": "0"
+    },
+    "end": {
+      "ms": "730821",
+      "MAC": "88:57:21:19:D5:70",
+      "motor": "DISABLED",
+      "encoder": "OK",
+      "angleDeg": "24.412",
+      "travelDeg": "-270.967",
+      "angleFrame": "0457",
+      "diagFrame": "81CA",
+      "magFrame": "920D",
+      "AGC": "202",
+      "OCF": "1",
+      "COF": "0",
+      "compHigh": "0",
+      "compLow": "0",
+      "magnitude": "4621",
+      "samples": "70097",
+      "badFrames": "0",
+      "parityErrors": "0",
+      "errorFlags": "0",
+      "unhealthySamples": "0"
+    },
+    "travel_range_deg": [
+      -1155.586,
+      97.361
+    ],
+    "positive_steps_over_1deg": 6,
+    "negative_steps_over_1deg": 6,
+    "all_samples_healthy": true,
+    "max_counters": {
+      "badFrames": 0,
+      "parityErrors": 0,
+      "errorFlags": 0,
+      "unhealthySamples": 0
+    }
+  }
+}

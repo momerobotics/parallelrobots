@@ -1,0 +1,15 @@
+{
+  "source_sha256": "56d228c4b9c4f7a1df9153def0c84fcae72fea25921c252406cb1eb05267ebf7",
+  "binary_sha256": "9cfa2cb9a42d59639dff3ac640a6431a8c5c5dddafdada5ddbb1a72e58e913db",
+  "upload_baud": 115200,
+  "profile": "legacy",
+  "spring_v_per_rad": 2,
+  "voltage_limit": 3.5,
+  "soft_current_a": 1.1,
+  "hard_current_a": 1.35,
+  "trial_timeout_seconds": 30,
+  "automatic_start": false,
+  "validation": "Both uploads hash-verified at 115200 baud. Trial stopped early after repeated speed cuts; both nodes confirmed disabled. User assessment pending. No hard-current cuts or thermal foldback in this trial. Firmware timeout not reached.",
+  "local_damping": 0.14,
+  "relative_damping": 0.1
+}

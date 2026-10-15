@@ -1,0 +1,51 @@
+{
+  "supply": "battery connected, confirmed by user; driver disabled",
+  "ports": {
+    "1410": {
+      "total_records": 1993,
+      "reviewed_recent_records": 100,
+      "file_age_seconds": 0.3,
+      "mean_mv": [
+        1666.361,
+        1666.997
+      ],
+      "range_mv": [
+        [
+          1665.3,
+          1667.45
+        ],
+        [
+          1665.98,
+          1668.23
+        ]
+      ],
+      "max_abs_offset_amps": [
+        0.0131,
+        0.0145
+      ]
+    },
+    "1430": {
+      "total_records": 1905,
+      "reviewed_recent_records": 100,
+      "file_age_seconds": 0.0,
+      "mean_mv": [
+        1666.358,
+        1666.962
+      ],
+      "range_mv": [
+        [
+          1665.68,
+          1667.23
+        ],
+        [
+          1666.46,
+          1667.76
+        ]
+      ],
+      "max_abs_offset_amps": [
+        0.0188,
+        0.0195
+      ]
+    }
+  }
+}

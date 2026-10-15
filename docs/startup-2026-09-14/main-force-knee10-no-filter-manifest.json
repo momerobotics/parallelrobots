@@ -1,0 +1,24 @@
+{
+  "source_sha256": "26f5824170a1fc86ad7c7f7d2147a400e827b01a754592b72c130de0106e7f2f",
+  "binary_sha256": "f696ffd05f6ebea5966a78555e57d992fd98796530ec3d9135151db3334a812d",
+  "upload_baud": 115200,
+  "profile": "force",
+  "curve": "Continuous piecewise linear from 0.01 rad deadband to 68% at 10 degrees, then 100% at 60 degrees",
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.75,
+  "hard_current_a": 2.0,
+  "thermal_soft_estimate_a": 0.9,
+  "thermal_hard_estimate_a": 1.1,
+  "thermal_time_constant_s": 45,
+  "force_attack_v_per_s": 80,
+  "trial_timeout_seconds": 120,
+  "automatic_start": false,
+  "validation": "Host checks, compilation and verified uploads passed. Final 120-second session completed, one arm and timer stop per node. End-of-day manual stop verified on both. User deliberately allowed oscillation at the end. Motor-surface baseline 28 C, final 35 C explicitly confirmed by the operator.",
+  "error_filter": false,
+  "boot_voltage_estimates_v": {
+    "A": 11.34,
+    "B": 11.17
+  },
+  "status": "Saved end-of-day continuation baseline; oscillation remains unresolved.",
+  "restoration_status": "Recovered after USB reconnection: both archived SinePWM uploads completed at 115200 baud with hash verification. Both booted, FOC ready, fresh mutual packets, force profile selected, manual stop confirmed: armed=0 auto=0 stopLatch=1 Uq=0. USB-only boot VIN about 1.06 V; no powered trial performed."
+}

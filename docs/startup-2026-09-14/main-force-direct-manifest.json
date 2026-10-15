@@ -1,0 +1,16 @@
+{
+  "source_sha256": "85b43fcc8a6b2f767fdb8f2eff9a8eb27d68365af6c5776c3a6fbc4d59c1facd",
+  "binary_sha256": "17ba629639e8866f3e29fe772a3d2a1d2bfa19fa77ffe78831ccd1fd6874807e",
+  "upload_baud": 115200,
+  "profile": "force",
+  "spring_v_per_rad": 10,
+  "max_uq_v": 5.5,
+  "soft_current_a": 1.1,
+  "hard_current_a": 1.35,
+  "damping": 0,
+  "automatic_start": false,
+  "trial_timeout_seconds": 30,
+  "validation": "Both uploads verified at 115200 baud. 30-second trial completed; A timer stop and B peer stop confirmed. User assessment pending. B peak exceeded the software cutoff transiently; thermal foldback occurred.",
+  "interaction_slew": false,
+  "startup_engagement_ms": 500
+}

@@ -1,0 +1,37 @@
+Monitor port settings:
+  baudrate=115200
+  bits=8
+  dtr=on
+  parity=none
+  rts=on
+  stop_bits=1
+
+Connecting to /dev/cu.usbserial-1430. Press CTRL-C to exit.
+ets Jun  8 2016 00:22:57
+
+rst:MKS STARTUP DIAGNOSTIC v1 | motor permanently DISABLED | SPI 1MHms=10321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=919E AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4510 samples=929 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=10821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.422 travelDeg=0.044 angleFrame=3485 diagFrame=01C4 magFrame=919B AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4507 samples=977 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=11321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.378 travelDeg=0.000 angleFrame=3483 diagFrame=01C4 magFrame=919E AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4510 samples=1025 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=11821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.356 travelDeg=-0.022 angleFrame=B482 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1073 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=12321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.422 travelDeg=0.044 angleFrame=3485 diagFrame=01C4 magFrame=919E AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4510 samples=1121 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=12821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.422 travelDeg=0.044 angleFrame=3485 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1169 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=13321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.356 travelDeg=-0.022 angleFrame=B482 diagFrame=01C4 magFrame=919B AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4507 samples=1217 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=13821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.422 travelDeg=0.044 angleFrame=3485 diagFrame=01C4 magFrame=919E AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4510 samples=1265 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=14321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1313 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=14821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=119F AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4511 samples=1361 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=15321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=119C AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4508 samples=1409 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=15821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.334 travelDeg=-0.044 angleFrame=B481 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1457 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=16321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.356 travelDeg=-0.022 angleFrame=B482 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1505 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=16821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.356 travelDeg=-0.022 angleFrame=B482 diagFrame=01C4 magFrame=119F AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4511 samples=1553 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=17321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.334 travelDeg=-0.044 angleFrame=B481 diagFrame=01C4 magFrame=119F AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4511 samples=1601 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=17821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.378 travelDeg=0.000 angleFrame=3483 diagFrame=01C4 magFrame=919E AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4510 samples=1649 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=18321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.422 travelDeg=0.044 angleFrame=3485 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1697 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=18821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=9198 AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4504 samples=1745 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=19321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.422 travelDeg=0.044 angleFrame=3485 diagFrame=01C4 magFrame=9198 AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4504 samples=1793 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=19821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.378 travelDeg=0.000 angleFrame=3483 diagFrame=01C4 magFrame=919B AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4507 samples=1841 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=20321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.466 travelDeg=0.088 angleFrame=B487 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1889 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=20821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.356 travelDeg=-0.022 angleFrame=B482 diagFrame=01C4 magFrame=919B AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4507 samples=1937 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=21321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=919D AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4509 samples=1985 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=21821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.400 travelDeg=0.022 angleFrame=B484 diagFrame=01C4 magFrame=1199 AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4505 samples=2033 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=22321 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.378 travelDeg=0.000 angleFrame=3483 diagFrame=01C4 magFrame=119C AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4508 samples=2081 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
+ms=22821 MAC=88:57:21:19:D5:70 motor=DISABLED encoder=OK angleDeg=295.334 travelDeg=-0.044 angleFrame=B481 diagFrame=01C4 magFrame=91A2 AGC=196 OCF=1 COF=0 compHigh=0 compLow=0 magnitude=4514 samples=2129 badFrames=0 parityErrors=0 errorFlags=0 unhealthySamples=0
